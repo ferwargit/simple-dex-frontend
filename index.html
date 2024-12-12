@@ -123,6 +123,15 @@
         async function connectWallet() {
             // Estoy mostrando en la consola "Conectando a la wallet..." cuando se hace click en el botón para verificar la llamada a la función
             console.log("Conectando a la wallet...");
+
+            if (window.ethereum) {
+                // Estoy mostrando en la consola "Metamask detectado" cuando se detecta la wallet
+                console.log("Metamask detectado");
+            }
+            else {
+                // Estoy mostrando en la consola "Metamask no detectado" cuando no se detecta la wallet
+                console.error("Metamask no detectado");
+            }
         }
 
         // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
