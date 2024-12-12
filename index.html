@@ -29,6 +29,24 @@
         <p id="ethBalance" class="text-center text-xl text-800 mt-6" style="display:none;">Balance de la Wallet: 0 ETH
         </p>
 
+        <!-- Reservas Actuales en el Pool de Liquidez  -->
+        <div id="reservesSection" class="mt-8" style="display:none;">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
+                <h2 class="text-2xl font-semibold text-white-800 mb-4">Reservas en el Pool de Liquidez</h2>
+                <p id="reserveA" class="text-white-700">Reserva de Token A: 0</p>
+                <p id="reserveB" class="text-white-700 mt-2">Reserva de Token B: 0</p>
+            </div>
+        </div>
+
+        <!-- Precio Actual de Intercambio en el Pool de Liquidez -->
+        <div id="exchangeRateSection" class="mt-8" style="display:none;">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
+                <h2 class="text-2xl font-semibold text-white-800 mb-4">Intercambio en el Pool de Liquidez</h2>
+                <p id="exchangeRateAtoB" class="text-white-700">1 Token A = 0 Token B</p>
+                <p id="exchangeRateBtoA" class="text-white-700 mt-2">1 Token B = 0 Token A</p>
+            </div>
+        </div>
+
         <!-- Obtener Precio -->
         <div id="getPriceSection" class="mt-8" style="display:none;">
             <div class="bg-gray-800 p-6 rounded-lg shadow-md mt-6 border border-white max-w-lg mx-auto">
@@ -42,7 +60,7 @@
             </div>
         </div>
 
-        
+
         <!-- Intercambiar Tokens -->
         <div id="swapTokensSection" class="mt-8" style="display:none;">
             <div class="bg-gray-800 p-6 rounded-lg shadow-md mt-6 border border-white max-w-lg mx-auto">
@@ -106,7 +124,11 @@
     <script type="module">
         import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
 
-        let provider, signer, address;
+        let provider, signer, address, simpleDexContract;
+        const simpleDexContractAddress = ""; // Dirección de tu contrato SimpleDEX
+        const simpleDexContractABI = [
+            // ABI del contrato SimpleDEX
+        ];
 
         async function updateBalance() {
             try {
@@ -168,8 +190,16 @@
                 document.getElementById("removeLiquiditySection").style.display = "block";
                 document.getElementById("getPriceSection").style.display = "block";
 
+                //  Mostrar Reservas y Precios
+                document.getElementById("reservesSection").style.display = "block";
+                document.getElementById("exchangeRateSection").style.display = "block";
+
                 // Actualizamos el balance de la wallet
                 await updateBalance();
+                // Actualizamos la reserva de la wallet
+                await updateReserve();
+                // Actualizamos 
+                await updateExchangeRate();
 
                 // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
                 console.log("connectWallet - Cuenta conectada");
@@ -204,9 +234,46 @@
             document.getElementById("removeLiquiditySection").style.display = "none";
             document.getElementById("getPriceSection").style.display = "none";
 
+            
+            document.getElementById("reservesSection").style.display = "none";
+            document.getElementById("exchangeRateSection").style.display = "none";
+
             console.log("disconnectWallet - Cuenta desconectada");
         }
 
+        async function updateReserves() {
+            try {
+                if (!simpleDexContract) {
+                    simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
+                }
+
+                const reserves = await simpleDexContract.getReserves();
+                document.getElementById("reserveA").innerText = `Reserva de Token A: ${ethers.formatUnits(reserves[0], 18)}`;
+                document.getElementById("reserveB").innerText = `Reserva de Token B: ${ethers.formatUnits(reserves[1], 18)}`;
+
+                console.log("updateReserves - Reservas actualizadas:", reserves);
+            } catch (error) {
+                console.error("updateReserves - Error al actualizar las reservas:", error);
+            }
+        }
+
+        async function updateExchangeRate() {
+            try {
+                if (!simpleDexContract) {
+                    simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
+                }
+
+                const reserves = await simpleDexContract.getReserves();
+                const exchangeRateAtoB = reserves[1] / reserves[0];
+                const exchangeRateBtoA = reserves[0] / reserves[1];
+                document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB.toFixed(4)} Token B`;
+                document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA.toFixed(4)} Token A`;
+
+                console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
+            } catch (error) {
+                console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
+            }
+        }
 
         // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
         document.getElementById("btnConnect").addEventListener("click", connectWallet);
