@@ -1,4 +1,5 @@
 import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
+// import { ethers } from "ethers";
 
 let provider, signer, address, simpleDexContract;
 const simpleDexContractAddress = ""; // Dirección de tu contrato SimpleDEX

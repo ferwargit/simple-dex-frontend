@@ -1,0 +1,24 @@
+{
+  "name": "simple-dex-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "live-server --port=8080 --host=127.0.0.1 src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferwargit/simple-dex-frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ferwargit/simple-dex-frontend/issues"
+  },
+  "homepage": "https://github.com/ferwargit/simple-dex-frontend#readme",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
