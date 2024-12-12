@@ -117,7 +117,16 @@
 
     <script type="module">
         import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
-        // Your code here...
+
+        let provider, signer;
+
+        async function connectWallet() {
+            // Estoy mostrando en la consola "Conectando a la wallet..." cuando se hace click en el botón para verificar la llamada a la función
+            console.log("Conectando a la wallet...");
+        }
+
+        // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
+        document.getElementById("btnConnect").addEventListener("click", connectWallet);
     </script>
 </body>
 
