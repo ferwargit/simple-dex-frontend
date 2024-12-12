@@ -153,8 +153,14 @@
                 // Mostrar los balances cuando la wallet está conectada
                 document.getElementById("ethBalance").style.display = "block";
 
+                // Estoy mostrando los campos de agregar liquidez, intercambiar tokens, retirar liquidez y obtener precio
+                document.getElementById("addLiquiditySection").style.display = "block";
+                document.getElementById("swapTokensSection").style.display = "block";
+                document.getElementById("removeLiquiditySection").style.display = "block";
+                document.getElementById("getPriceSection").style.display = "block";
+
                 // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
-                console.log("Cuenta conectada");
+                console.log("connectWallet - Cuenta conectada");
             }
             else {
                 // Estoy mostrando en la consola "Metamask no detectado" cuando no se detecta la wallet
@@ -162,8 +168,38 @@
             }
         }
 
+        async function disconnectWallet() {
+            console.log("Desconectando la wallet...");
+
+            // Limpiamos el estado de la aplicación
+            provider = null;
+            signer = null;
+            address = null;
+
+            // Estoy ocultando el botón de desconectar y mostrando el botón de conectar
+            document.getElementById("btnDisconnect").style.display = "none";
+            document.getElementById("btnConnect").style.display = "block";
+
+            // Actualizamos el estado
+            document.getElementById("status").innerText = "Estado: Desconectado";
+
+            // Ocultar los balances cuando la wallet está desconectada
+            document.getElementById("ethBalance").style.display = "none";
+
+            // Ocultar los campos de agregar liquidez, intercambiar tokens, retirar liquidez y obtener precio
+            document.getElementById("addLiquiditySection").style.display = "none";
+            document.getElementById("swapTokensSection").style.display = "none";
+            document.getElementById("removeLiquiditySection").style.display = "none";
+            document.getElementById("getPriceSection").style.display = "none";
+
+            console.log("disconnectWallet - Cuenta desconectada");
+        }
+
+
         // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
         document.getElementById("btnConnect").addEventListener("click", connectWallet);
+        // Estoy buscando el "btnDisconnect" y le estoy diciendo que cuando se haga click, se ejecute la función "disconnectWallet"
+        document.getElementById("btnDisconnect").addEventListener("click", disconnectWallet);
     </script>
 </body>
 
