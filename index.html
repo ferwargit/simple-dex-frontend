@@ -22,7 +22,97 @@
                 style="display:none;">Desconectar wallet</button>
         </div>
 
-        
+        <!-- Mostrar estado de la wallet -->
+        <p id="status" class="text-center text-600 mt-4">Estado: Desconectado</p>
+
+        <!-- Mostrar balance de la wallet -->
+        <p id="ethBalance" class="text-center text-xl text-800 mt-6" style="display:none;">Balance de la Wallet: 0 ETH
+        </p>
+
+        <!-- Agregar Liquidez -->
+        <div id="addLiquiditySection" class="mt-8" style="display:none;">
+            <h2 class="text-2xl font-bold mb-4">Agregar Liquidez</h2>
+            <form id="addLiquidityForm" class="space-y-4">
+                <div>
+                    <label for="amountA" class="block text-sm font-medium text-gray-300">Cantidad de Token A</label>
+                    <input type="number" id="amountA" name="amountA"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="amountB" class="block text-sm font-medium text-gray-300">Cantidad de Token B</label>
+                    <input type="number" id="amountB" name="amountB"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                    class="w-full max-w-xs bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Agregar
+                    Liquidez</button>
+            </form>
+        </div>
+
+        <!-- Intercambiar Tokens -->
+        <div id="swapTokensSection" class="mt-8" style="display:none;">
+            <h2 class="text-2xl font-bold mb-4">Intercambiar Tokens</h2>
+            <form id="swapAforBForm" class="space-y-4">
+                <div>
+                    <label for="amountAIn" class="block text-sm font-medium text-gray-300">Cantidad de Token A</label>
+                    <input type="number" id="amountAIn" name="amountAIn"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                    class="w-full max-w-xs bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Intercambiar
+                    Token A por Token B</button>
+            </form>
+            <form id="swapBforAForm" class="space-y-4 mt-8">
+                <div>
+                    <label for="amountBIn" class="block text-sm font-medium text-gray-300">Cantidad de Token B</label>
+                    <input type="number" id="amountBIn" name="amountBIn"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                    class="w-full max-w-xs bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Intercambiar
+                    Token B por Token A</button>
+            </form>
+        </div>
+
+        <!-- Retirar Liquidez -->
+        <div id="removeLiquiditySection" class="mt-8" style="display:none;">
+            <h2 class="text-2xl font-bold mb-4">Retirar Liquidez</h2>
+            <form id="removeLiquidityForm" class="space-y-4">
+                <div>
+                    <label for="removeAmountA" class="block text-sm font-medium text-gray-300">Cantidad de Token
+                        A</label>
+                    <input type="number" id="removeAmountA" name="removeAmountA"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="removeAmountB" class="block text-sm font-medium text-gray-300">Cantidad de Token
+                        B</label>
+                    <input type="number" id="removeAmountB" name="removeAmountB"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                    class="w-full max-w-xs bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Retirar
+                    Liquidez</button>
+            </form>
+        </div>
+
+        <!-- Obtener Precio -->
+        <div id="getPriceSection" class="mt-8" style="display:none;">
+            <h2 class="text-2xl font-bold mb-4">Obtener Precio</h2>
+            <form id="getPriceForm" class="space-y-4">
+                <div>
+                    <label for="tokenAddress" class="block text-sm font-medium text-gray-300">Dirección del
+                        Token</label>
+                    <input type="text" id="tokenAddress" name="tokenAddress"
+                        class="mt-1 block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                    class="w-full max-w-xs bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Obtener
+                    Precio</button>
+            </form>
+            <p id="tokenPrice" class="text-center text-xl text-800 mt-4" style="display:none;">Precio del Token: 0</p>
+        </div>
+
     </div>
 </body>
 
