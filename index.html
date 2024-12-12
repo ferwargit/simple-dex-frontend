@@ -118,7 +118,7 @@
     <script type="module">
         import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
 
-        let provider, signer;
+        let provider, signer, address;
 
         async function connectWallet() {
             // Estoy mostrando en la consola "Conectando a la wallet..." cuando se hace click en el botón para verificar la llamada a la función
@@ -127,6 +127,34 @@
             if (window.ethereum) {
                 // Estoy mostrando en la consola "Metamask detectado" cuando se detecta la wallet
                 console.log("Metamask detectado");
+
+                // Estoy obteniendo la cuenta de la wallet que se está conectando
+                await window.ethereum.request({ method: "eth_requestAccounts" });
+                // Estoy creando un nuevo proveedor para la wallet
+                provider = new ethers.BrowserProvider(window.ethereum);
+                // Hacemos un console.log del provider para ver las propiedades
+                console.log("provider:", provider);
+                // Estoy obteniendo el signer de la wallet
+                signer = await provider.getSigner();
+                // Hacemos un console.log del signer para ver las propiedades
+                console.log("signer:", signer)
+                // Estoy obteniendo la dirección de la wallet
+                address = await signer.getAddress();
+                // Hacemos un console.log de la dirección de la wallet
+                console.log("connectWallet - address:", address);
+
+                // Estoy ocultando el botón de conectar y mostrando el botón de desconectar
+                document.getElementById("btnConnect").style.display = "none";
+                document.getElementById("btnDisconnect").style.display = "block";
+
+                // Estoy mostrando el estado de la wallet
+                document.getElementById("status").innerText = `Estado: Conectado a la cuenta ${address}`;
+
+                // Mostrar los balances cuando la wallet está conectada
+                document.getElementById("ethBalance").style.display = "block";
+
+                // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
+                console.log("Cuenta conectada");
             }
             else {
                 // Estoy mostrando en la consola "Metamask no detectado" cuando no se detecta la wallet
