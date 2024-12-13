@@ -334,23 +334,69 @@ async function updateReserves() {
 
 async function updateExchangeRate() {
     try {
+        // Verificar y reinicializar el contrato si es necesario
         if (!simpleDexContract) {
-            simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
+            simpleDexContract = new ethers.Contract(
+                simpleDexContractAddress,
+                simpleDexContractABI,
+                provider
+            );
         }
 
-        // Leemos las reservas individualmente ya que son variables públicas
-        const reserveA = await simpleDexContract.reserveA();
-        const reserveB = await simpleDexContract.reserveB();
+        // Obtener reservas de forma segura con Promise.all
+        const [reserveA, reserveB] = await Promise.all([
+            simpleDexContract.reserveA(),
+            simpleDexContract.reserveB()
+        ]);
 
-        const reserves = [reserveA, reserveB];
-        const exchangeRateAtoB = (parseFloat(reserves[1]) / parseFloat(reserves[0])).toFixed(6);
-        const exchangeRateBtoA = (parseFloat(reserves[0]) / parseFloat(reserves[1])).toFixed(6);
-        document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB} Token B`;
-        document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA} Token A`;
+        // Conversión segura a números, manejando casos de reservas cero
+        const reserveANum = parseFloat(reserveA.toString());
+        const reserveBNum = parseFloat(reserveB.toString());
 
-        console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
+        // Calcular tasas de intercambio con manejo de división por cero
+        let exchangeRateAtoB = "0.000000";
+        let exchangeRateBtoA = "0.000000";
+
+        if (reserveANum > 0 && reserveBNum > 0) {
+            exchangeRateAtoB = (reserveBNum / reserveANum).toFixed(6);
+            exchangeRateBtoA = (reserveANum / reserveBNum).toFixed(6);
+        }
+
+        // Actualizar elementos de la interfaz
+        const exchangeRateAtoBElement = document.getElementById("exchangeRateAtoB");
+        const exchangeRateBtoAElement = document.getElementById("exchangeRateBtoA");
+
+        if (exchangeRateAtoBElement && exchangeRateBtoAElement) {
+            exchangeRateAtoBElement.innerText = `1 Token A = ${exchangeRateAtoB} Token B`;
+            exchangeRateBtoAElement.innerText = `1 Token B = ${exchangeRateBtoA} Token A`;
+        } else {
+            console.warn("updateExchangeRate - Elementos de tasa de intercambio no encontrados");
+        }
+
+        // Logging detallado
+        console.log("updateExchangeRate - Tasas de intercambio actualizadas:", {
+            reserveA: reserveANum,
+            reserveB: reserveBNum,
+            exchangeRateAtoB,
+            exchangeRateBtoA
+        });
+
     } catch (error) {
-        console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
+        // Manejo de errores detallado
+        console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+
+        // Opcional: Mostrar mensaje de error en la interfaz
+        const exchangeRateAtoBElement = document.getElementById("exchangeRateAtoB");
+        const exchangeRateBtoAElement = document.getElementById("exchangeRateBtoA");
+
+        if (exchangeRateAtoBElement && exchangeRateBtoAElement) {
+            exchangeRateAtoBElement.innerText = "Error al obtener tasa";
+            exchangeRateBtoAElement.innerText = "Error al obtener tasa";
+        }
     }
 }
 
@@ -412,9 +458,112 @@ async function getTokenPrice() {
 }
 
 
+async function swapTokenAforB() {
+    try {
+        // Verificamos que el contrato SimpleDex esté inicializado
+        if (!simpleDexContract) {
+            console.error("El contrato SimpleDex no está inicializado");
+            return;
+        }
+
+        // Obtener la cantidad de Token A a intercambiar
+        const amountAInput = document.getElementById("amountAIn");
+        const amountAIn = amountAInput.value.trim();
+
+        // Validaciones
+        if (!amountAIn || isNaN(amountAIn) || Number(amountAIn) <= 0) {
+            console.error("Cantidad de Token A inválida");
+            return;
+        }
+
+        // Convertir a unidades del contrato (asumiendo 18 decimales)
+        const amountAInWei = ethers.parseUnits(amountAIn, 18);
+
+        // Llamar a la función de intercambio del contrato
+        const tx = await simpleDexContract.swapAforB(amountAInWei);
+
+        // Esperar confirmación de la transacción
+        const receipt = await tx.wait();
+
+        console.log("Intercambio de Token A a Token B exitoso:", receipt);
+
+        // Limpiar input
+        amountAInput.value = "";
+
+        // Actualizar balances y tasas de intercambio 
+        await Promise.all([
+            updateExchangeRate(),
+            updateTokenBalances(),
+            updateReserves()
+        ]);
+
+    } catch (error) {
+        console.error("Error en el intercambio de Token A por Token B:", error);
+
+        // Manejo de errores específicos
+        if (error.code === "ACTION_REJECTED") {
+            console.log("Transacción cancelada por el usuario");
+        }
+    }
+}
+
+
+async function swapTokenBforA() {
+    try {
+        // Verificamos que el contrato SimpleDex esté inicializado
+        if (!simpleDexContract) {
+            console.error("El contrato SimpleDex no está inicializado");
+            return;
+        }
+
+        // Obtener la cantidad de Token B a intercambiar
+        const amountBInput = document.getElementById("amountBIn");
+        const amountBIn = amountBInput.value.trim();
+
+        // Validaciones
+        if (!amountBIn || isNaN(amountBIn) || Number(amountBIn) <= 0) {
+            console.error("Cantidad de Token B inválida");
+            return;
+        }
+
+        // Convertir a unidades del contrato (asumiendo 18 decimales)
+        const amountBInWei = ethers.parseUnits(amountBIn, 18);
+
+        // Llamar a la función de intercambio del contrato
+        const tx = await simpleDexContract.swapBforA(amountBInWei);
+
+        // Esperar confirmación de la transacción
+        const receipt = await tx.wait();
+
+        console.log("Intercambio de Token B a Token A exitoso:", receipt);
+
+        // Limpiar input
+        amountBInput.value = "";
+
+        // Actualizar balances y tasas de intercambio 
+        await Promise.all([
+            updateExchangeRate(),
+            updateTokenBalances(),
+            updateReserves()
+        ]);
+
+    } catch (error) {
+        console.error("Error en el intercambio de Token B por Token A:", error);
+
+        // Manejo de errores específicos
+        if (error.code === "ACTION_REJECTED") {
+            console.log("Transacción cancelada por el usuario");
+        }
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
 document.getElementById("btnGetPrice").addEventListener("click", getTokenPrice);
 // Estoy buscando el "btnDisconnect" y le estoy diciendo que cuando se haga click, se ejecute la función "disconnectWallet"
 document.getElementById("btnDisconnect").addEventListener("click", disconnectWallet);
+// Agregamos el event listener para los botones de intercambio
+document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB);
+document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
