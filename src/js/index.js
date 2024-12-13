@@ -125,6 +125,7 @@ async function disconnectWallet() {
     provider = null;
     signer = null;
     address = null;
+    simpleDexContract = null;
 
     // Estoy ocultando el botón de desconectar y mostrando el botón de conectar
     document.getElementById("btnDisconnect").style.display = "none";
@@ -136,15 +137,15 @@ async function disconnectWallet() {
     // Ocultar los balances cuando la wallet está desconectada
     document.getElementById("ethBalance").style.display = "none";
 
+    document.getElementById("reservesSection").style.display = "none";
+    document.getElementById("exchangeRateSection").style.display = "none";
+    document.getElementById("tokensAddressSection").style.display = "none";
+
     // Ocultar los campos de agregar liquidez, intercambiar tokens, retirar liquidez y obtener precio
     document.getElementById("addLiquiditySection").style.display = "none";
     document.getElementById("swapTokensSection").style.display = "none";
     document.getElementById("removeLiquiditySection").style.display = "none";
     document.getElementById("getPriceSection").style.display = "none";
-
-
-    document.getElementById("reservesSection").style.display = "none";
-    document.getElementById("exchangeRateSection").style.display = "none";
 
     console.log("disconnectWallet - Cuenta desconectada");
 }
