@@ -319,7 +319,50 @@ window.copyToClipboard = function(elementId) {
 }
 
 
+async function getTokenPrice() {
+    try {
+        // Verificamos que el contrato SimpleDex esté inicializado
+        if (!simpleDexContract) {
+            console.error("El contrato SimpleDex no está inicializado");
+            return;
+        }
+
+        // Obtenemos la dirección del token desde el input
+        const tokenAddressInput = document.getElementById("tokenAddress");
+        const tokenAddress = tokenAddressInput.value.trim();
+
+        // Validamos que se haya ingresado una dirección
+        if (!tokenAddress) {
+            console.error("Por favor ingrese una dirección de token");
+            return;
+        }
+
+        // Llamamos a la función getPrice del contrato
+        const price = await simpleDexContract.getPrice(tokenAddress);
+
+        // Formateamos el precio (asumiendo 18 decimales)
+        const formattedPrice = ethers.formatUnits(price, 18);
+
+        // Mostramos el precio en la interfaz (puedes agregar un elemento para esto)
+        console.log(`Precio del token: ${formattedPrice}`);
+        
+        // Mostrar el precio en la interfaz
+        document.getElementById("tokenPrice").textContent = `Precio: ${formattedPrice}`;
+
+    } catch (error) {
+        console.error("Error al obtener el precio del token:", error);
+        
+        // Manejo de errores específicos
+        if (error.code === "INVALID_ARGUMENT") {
+            console.error("Dirección de token inválida");
+        }
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
+// Agregamos el event listener para el botón de obtener precio
+document.getElementById("btnGetPrice").addEventListener("click", getTokenPrice);
 // Estoy buscando el "btnDisconnect" y le estoy diciendo que cuando se haga click, se ejecute la función "disconnectWallet"
 document.getElementById("btnDisconnect").addEventListener("click", disconnectWallet);
