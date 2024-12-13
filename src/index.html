@@ -162,10 +162,16 @@
                         <input type="text" id="tokenAddress" name="tokenAddress" placeholder="Dirección del Token"
                             class="w-full p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
                     </div>
-                    <button id="btnGetPrice"
-                        class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition w-full">
-                        Obtener Precio
-                    </button>
+                    <div class="flex space-x-4">
+                        <button id="btnGetPrice"
+                            class="flex-1 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">
+                            Obtener Precio
+                        </button>
+                        <button id="btnClearPrice"
+                            class="flex-1 bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition">
+                            Limpiar
+                        </button>
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="text-white-700 font-medium">Precio del Token:</span>
                         <code id="tokenPrice" class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">-</code>

@@ -458,6 +458,23 @@ async function getTokenPrice() {
 }
 
 
+function clearTokenPrice() {
+    // Limpiar input de dirección
+    const tokenAddressInput = document.getElementById("tokenAddress");
+    if (tokenAddressInput) {
+        tokenAddressInput.value = "";
+    }
+
+    // Restablecer precio del token
+    const tokenPriceElement = document.getElementById("tokenPrice");
+    if (tokenPriceElement) {
+        tokenPriceElement.textContent = "-";
+    }
+
+    console.log("Precio del token y dirección limpiados");
+}
+
+
 async function swapTokenAforB() {
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
@@ -564,6 +581,8 @@ document.getElementById("btnConnect").addEventListener("click", connectWallet);
 document.getElementById("btnGetPrice").addEventListener("click", getTokenPrice);
 // Estoy buscando el "btnDisconnect" y le estoy diciendo que cuando se haga click, se ejecute la función "disconnectWallet"
 document.getElementById("btnDisconnect").addEventListener("click", disconnectWallet);
+// Estoy buscando el "btnClearPrice" y le estoy diciendo que cuando se haga click, se ejecute la función "clearTokenPrice"
+document.getElementById("btnClearPrice").addEventListener("click", clearTokenPrice);
 // Agregamos el event listener para los botones de intercambio
 document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB);
 document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
