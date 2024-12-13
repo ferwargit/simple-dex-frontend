@@ -10,7 +10,7 @@
 <body class="bg-gray-900 text-white font-sans">
     <div class="container mx-auto p-6">
         <!-- Titulo -->
-        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">Simple DEX</h1>
+        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">Simple DEX - Scroll Sepolia</h1>
 
         <!-- Botónes para conectar y desconectar la wallet -->
         <div class="flex justify-center px-6">
@@ -22,8 +22,31 @@
                 style="display:none;">Desconectar Wallet</button>
         </div>
 
-        <!-- Mostrar estado de la wallet -->
-        <p id="status" class="text-center text-600 mt-4">Estado: Desconectado</p>
+        <!-- Estado de la wallet -->
+        <div id="walletStatusSection" class="mt-8">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                <h2 class="text-2xl font-semibold text-white-800 mb-4">Estado de la Wallet</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-white-700 font-medium">Estado de Conexión:</span>
+                        <code id="status"
+                            class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">Desconectado</code>
+                    </div>
+                    <div id="accountDetails" class="space-y-2" style="display:none;">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white-700 font-medium">Cuenta:</span>
+                            <code id="connectedAccount"
+                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono truncate max-w-[370px]">-</code>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white-700 font-medium">Red:</span>
+                            <code id="connectedNetwork"
+                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">-</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Balance de la wallet ETH -->

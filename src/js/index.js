@@ -143,7 +143,53 @@ async function connectWallet() {
         document.getElementById("btnDisconnect").style.display = "block";
 
         // Estoy mostrando el estado de la wallet
-        document.getElementById("status").innerText = `Estado: Conectado a la cuenta ${address}`;
+        // document.getElementById("status").textContent = `Conectado a la cuenta ${address}`;
+
+        // Actualizar estado de conexión
+        document.getElementById("status").textContent = "Conectado";
+        // Mostrar detalles de la cuenta
+        document.getElementById("connectedAccount").textContent = address;
+        // Mostrar sección de detalles de cuenta
+        document.getElementById("accountDetails").style.display = "block";
+
+        // Obtener y mostrar la red
+        try {
+            const network = await provider.getNetwork();
+            const chainId = Number(network.chainId);
+
+            const networkMap = {
+                1: "Ethereum Mainnet",
+                3: "Ropsten",
+                4: "Rinkeby",
+                42: "Kovan",
+                56: "Binance Smart Chain",
+                97: "Binance Smart Chain Testnet",
+                137: "Polygon Mainnet",
+                80001: "Mumbai",
+                42161: "Arbitrum One",
+                421611: "Arbitrum Goerli",
+                10: "Optimism",
+                420: "Optimism Goerli",
+                42170: "Avalanche",
+                43113: "Avalanche Fuji",
+                43114: "Avalanche Mainnet",
+                11155111: "Sepolia",
+                534351: "Scroll Sepolia",
+                // Agrega más redes aquí...
+            };
+
+            const networkName = networkMap[chainId] || `Red ${chainId}`;
+
+            console.log(`Red detectada: ${networkName} ID: ${chainId}`);
+
+            document.getElementById("connectedNetwork").textContent = networkName;
+
+            console.log("Red detectada:", networkName, "ID:", chainId);
+        } catch (error) {
+            console.error("Error al obtener la red:", error);
+            document.getElementById("connectedNetwork").textContent = "Red No Detectada";
+        }
+
 
         // Mostrar los balances cuando la wallet está conectada
         document.getElementById("ethBalanceSection").style.display = "block";
@@ -235,8 +281,14 @@ async function disconnectWallet() {
     document.getElementById("btnDisconnect").style.display = "none";
     document.getElementById("btnConnect").style.display = "block";
 
+    // Ocultar los detalles de la cuenta
+    document.getElementById("accountDetails").style.display = "none";
+    // Limpiar valores
+    document.getElementById("connectedAccount").textContent = "-";
+    document.getElementById("connectedNetwork").textContent = "-";
+
     // Actualizamos el estado
-    document.getElementById("status").innerText = "Estado: Desconectado";
+    document.getElementById("status").textContent = "Desconectado";
 
     // Ocultar los balances cuando la wallet está desconectada
     document.getElementById("ethBalanceSection").style.display = "none";
@@ -303,7 +355,7 @@ async function updateExchangeRate() {
 }
 
 
-window.copyToClipboard = function(elementId) {
+window.copyToClipboard = function (elementId) {
     const element = document.getElementById(elementId);
     navigator.clipboard.writeText(element.textContent).then(() => {
         const tooltip = element.nextElementSibling;
@@ -345,13 +397,13 @@ async function getTokenPrice() {
 
         // Mostramos el precio en la interfaz (puedes agregar un elemento para esto)
         console.log(`Precio del token: ${formattedPrice}`);
-        
+
         // Mostrar el precio en la interfaz
         document.getElementById("tokenPrice").textContent = `Precio: ${formattedPrice}`;
 
     } catch (error) {
         console.error("Error al obtener el precio del token:", error);
-        
+
         // Manejo de errores específicos
         if (error.code === "INVALID_ARGUMENT") {
             console.error("Dirección de token inválida");
