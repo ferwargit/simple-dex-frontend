@@ -38,13 +38,57 @@
             </div>
         </div>
 
-        
+
         <!-- Tasas de intercambio actualizadas -->
         <div id="exchangeRateSection" class="mt-8" style="display:none;">
             <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
                 <h2 class="text-2xl font-semibold text-white-800 mb-4">Tasas de intercambio actualizadas</h2>
                 <p id="exchangeRateAtoB" class="text-white-700">1 Token A = 0 Token B</p>
                 <p id="exchangeRateBtoA" class="text-white-700 mt-2">1 Token B = 0 Token A</p>
+            </div>
+        </div>
+
+
+        <!-- Direcciones de Tokens -->
+        <div id="tokensAddressSection" class="mt-8" style="display:none;">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
+                <h2 class="text-2xl font-semibold text-white-800 mb-4">Direcciones de Tokens</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-white-700 font-medium">Token A:</span>
+                        <div class="flex items-center">
+                            <code id="tokenAAddress"
+                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm mr-3 truncate max-w-[250px] font-mono">-</code>
+                            <button
+                                onclick="navigator.clipboard.writeText(document.getElementById('tokenAAddress').textContent)"
+                                class="bg-blue-500 text-white px-3 py-1.5 rounded-md hover:bg-blue-600 transition text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-white-700 font-medium">Token B:</span>
+                        <div class="flex items-center">
+                            <code id="tokenBAddress"
+                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm mr-3 truncate max-w-[250px] font-mono">-</code>
+                            <button
+                                onclick="navigator.clipboard.writeText(document.getElementById('tokenBAddress').textContent)"
+                                class="bg-blue-500 text-white px-3 py-1.5 rounded-md hover:bg-blue-600 transition text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

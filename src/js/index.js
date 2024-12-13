@@ -71,6 +71,14 @@ async function connectWallet() {
         document.getElementById("reservesSection").style.display = "block";
         document.getElementById("exchangeRateSection").style.display = "block";
 
+        // Inicializamos el contrato SimpleDex
+        await initializeSimpleDexContract();
+
+        // Mostrar Direcciones de Tokens
+        document.getElementById("tokensAddressSection").style.display = "block";
+        document.getElementById("tokenAAddress").textContent = await simpleDexContract.tokenA();
+        document.getElementById("tokenBAddress").textContent = await simpleDexContract.tokenB();
+
         // Actualizamos el balance de la wallet
         await updateBalance();
         // Actualizamos la reserva de la wallet
@@ -78,9 +86,6 @@ async function connectWallet() {
         // Actualizamos 
         await updateExchangeRate();
         
-        // Inicializamos el contrato SimpleDex
-        await initializeSimpleDexContract();
-
         // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
         console.log("connectWallet - Cuenta conectada");
     }
