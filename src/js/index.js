@@ -77,6 +77,9 @@ async function connectWallet() {
         await updateReserves();
         // Actualizamos 
         await updateExchangeRate();
+        
+        // Inicializamos el contrato SimpleDex
+        await initializeSimpleDexContract();
 
         // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
         console.log("connectWallet - Cuenta conectada");
@@ -84,6 +87,29 @@ async function connectWallet() {
     else {
         // Estoy mostrando en la consola "Metamask no detectado" cuando no se detecta la wallet
         console.error("Metamask no detectado");
+    }
+}
+
+async function initializeSimpleDexContract() {
+    try {
+        // Verificamos que tengamos el signer antes de inicializar el contrato
+        if (!signer) {
+            console.error("initializeSimpleDexContract - No hay signer disponible");
+            return null;
+        }
+
+        // Creamos la instancia del contrato usando ethers.js
+        simpleDexContract = new ethers.Contract(
+            simpleDexContractAddress, 
+            simpleDexContractABI, 
+            signer
+        );
+
+        console.log("SimpleDex Contract inicializado:", simpleDexContract);
+        return simpleDexContract;
+    } catch (error) {
+        console.error("Error al inicializar el contrato SimpleDex:", error);
+        return null;
     }
 }
 
@@ -151,8 +177,8 @@ async function updateExchangeRate() {
         const reserveB = await simpleDexContract.reserveB();
 
         const reserves = [reserveA, reserveB];
-        const exchangeRateAtoB = (parseFloat(reserves[1]) / parseFloat(reserves[0])).toFixed(4);
-        const exchangeRateBtoA = (parseFloat(reserves[0]) / parseFloat(reserves[1])).toFixed(4);
+        const exchangeRateAtoB = (parseFloat(reserves[1]) / parseFloat(reserves[0])).toFixed(6);
+        const exchangeRateBtoA = (parseFloat(reserves[0]) / parseFloat(reserves[1])).toFixed(6);
         document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB} Token B`;
         document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA} Token A`;
 
