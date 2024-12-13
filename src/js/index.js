@@ -76,7 +76,7 @@ async function connectWallet() {
         // Actualizamos la reserva de la wallet
         await updateReserves();
         // Actualizamos 
-        // await updateExchangeRate();
+        await updateExchangeRate();
 
         // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
         console.log("connectWallet - Cuenta conectada");
@@ -113,7 +113,7 @@ async function disconnectWallet() {
 
 
     document.getElementById("reservesSection").style.display = "none";
-    // document.getElementById("exchangeRateSection").style.display = "none";
+    document.getElementById("exchangeRateSection").style.display = "none";
 
     console.log("disconnectWallet - Cuenta desconectada");
 }
@@ -140,23 +140,27 @@ async function updateReserves() {
     }
 }
 
-// async function updateExchangeRate() {
-//     try {
-//         if (!simpleDexContract) {
-//             simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
-//         }
+async function updateExchangeRate() {
+    try {
+        if (!simpleDexContract) {
+            simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
+        }
 
-//         const reserves = await simpleDexContract.getReserves();
-//         const exchangeRateAtoB = reserves[1] / reserves[0];
-//         const exchangeRateBtoA = reserves[0] / reserves[1];
-//         document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB.toFixed(4)} Token B`;
-//         document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA.toFixed(4)} Token A`;
+        // Leemos las reservas individualmente ya que son variables públicas
+        const reserveA = await simpleDexContract.reserveA();
+        const reserveB = await simpleDexContract.reserveB();
 
-//         console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
-//     } catch (error) {
-//         console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
-//     }
-// }
+        const reserves = [reserveA, reserveB];
+        const exchangeRateAtoB = (parseFloat(reserves[1]) / parseFloat(reserves[0])).toFixed(4);
+        const exchangeRateBtoA = (parseFloat(reserves[0]) / parseFloat(reserves[1])).toFixed(4);
+        document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB} Token B`;
+        document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA} Token A`;
+
+        console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
+    } catch (error) {
+        console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
+    }
+}
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
