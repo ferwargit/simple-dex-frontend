@@ -1,11 +1,11 @@
 import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
-// import { ethers } from "ethers";
+import { CONFIG } from './config.js';
 
 let provider, signer, address, simpleDexContract;
-const simpleDexContractAddress = ""; // Dirección de tu contrato SimpleDEX
-const simpleDexContractABI = [
-    // ABI del contrato SimpleDEX
-];
+const simpleDexContractAddress = CONFIG.SIMPLE_DEX_CONTRACT_ADDRESS; // Dirección de tu contrato SimpleDEX
+console.log("simpleDexContractAddress:", simpleDexContractAddress);
+const simpleDexContractABI = CONFIG.SIMPLE_DEX_ABI;
+console.log("simpleDexContractABI:", simpleDexContractABI);
 
 async function updateBalance() {
     try {
@@ -74,9 +74,9 @@ async function connectWallet() {
         // Actualizamos el balance de la wallet
         await updateBalance();
         // Actualizamos la reserva de la wallet
-        await updateReserve();
+        await updateReserves();
         // Actualizamos 
-        await updateExchangeRate();
+        // await updateExchangeRate();
 
         // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
         console.log("connectWallet - Cuenta conectada");
@@ -113,7 +113,7 @@ async function disconnectWallet() {
 
 
     document.getElementById("reservesSection").style.display = "none";
-    document.getElementById("exchangeRateSection").style.display = "none";
+    // document.getElementById("exchangeRateSection").style.display = "none";
 
     console.log("disconnectWallet - Cuenta desconectada");
 }
@@ -124,33 +124,39 @@ async function updateReserves() {
             simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
         }
 
-        const reserves = await simpleDexContract.getReserves();
-        document.getElementById("reserveA").innerText = `Reserva de Token A: ${ethers.formatUnits(reserves[0], 18)}`;
-        document.getElementById("reserveB").innerText = `Reserva de Token B: ${ethers.formatUnits(reserves[1], 18)}`;
+        // Leemos las reservas individualmente ya que son variables públicas
+        const reserveA = await simpleDexContract.reserveA();
+        const reserveB = await simpleDexContract.reserveB();
 
-        console.log("updateReserves - Reservas actualizadas:", reserves);
+        document.getElementById("reserveA").innerText = `Reserva de Token A: ${ethers.formatUnits(reserveA, 18)}`;
+        document.getElementById("reserveB").innerText = `Reserva de Token B: ${ethers.formatUnits(reserveB, 18)}`;
+
+        console.log("updateReserves - Reservas actualizadas:", {
+            reserveA: ethers.formatUnits(reserveA, 18),
+            reserveB: ethers.formatUnits(reserveB, 18)
+        });
     } catch (error) {
         console.error("updateReserves - Error al actualizar las reservas:", error);
     }
 }
 
-async function updateExchangeRate() {
-    try {
-        if (!simpleDexContract) {
-            simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
-        }
+// async function updateExchangeRate() {
+//     try {
+//         if (!simpleDexContract) {
+//             simpleDexContract = new ethers.Contract(simpleDexContractAddress, simpleDexContractABI, provider);
+//         }
 
-        const reserves = await simpleDexContract.getReserves();
-        const exchangeRateAtoB = reserves[1] / reserves[0];
-        const exchangeRateBtoA = reserves[0] / reserves[1];
-        document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB.toFixed(4)} Token B`;
-        document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA.toFixed(4)} Token A`;
+//         const reserves = await simpleDexContract.getReserves();
+//         const exchangeRateAtoB = reserves[1] / reserves[0];
+//         const exchangeRateBtoA = reserves[0] / reserves[1];
+//         document.getElementById("exchangeRateAtoB").innerText = `1 Token A = ${exchangeRateAtoB.toFixed(4)} Token B`;
+//         document.getElementById("exchangeRateBtoA").innerText = `1 Token B = ${exchangeRateBtoA.toFixed(4)} Token A`;
 
-        console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
-    } catch (error) {
-        console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
-    }
-}
+//         console.log("updateExchangeRate - Tasas de intercambio actualizadas:", exchangeRateAtoB, exchangeRateBtoA);
+//     } catch (error) {
+//         console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
+//     }
+// }
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
