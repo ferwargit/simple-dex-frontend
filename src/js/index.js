@@ -7,6 +7,90 @@ console.log("simpleDexContractAddress:", simpleDexContractAddress);
 const simpleDexContractABI = CONFIG.SIMPLE_DEX_ABI;
 console.log("simpleDexContractABI:", simpleDexContractABI);
 
+// ABI global para tokens ERC20
+let ERC20_ABI = null;
+
+async function loadABI() {
+    try {
+        const response = await fetch('https://gist.githubusercontent.com/veox/8800debbf56e24718f9f483e1e40c35c/raw/f853187315486225002ba56e5283c1dba0556e6f/erc20.abi.json');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const abi = await response.json();
+
+        // Verificaciones adicionales
+        if (!abi || !Array.isArray(abi)) {
+            throw new Error("ABI inválido o vacío");
+        }
+
+        // Asignamos globalmente y registramos
+        ERC20_ABI = abi;
+        console.log("ABI cargado exitosamente:", abi.length, "métodos");
+
+        return abi;
+    } catch (error) {
+        console.error("Error al cargar ABI:", error);
+        ERC20_ABI = null; // Aseguramos que sea null en caso de error
+        throw error; // Re-lanzamos para que el llamador pueda manejar el error
+    }
+}
+
+async function updateTokenBalances() {
+    try {
+        // Verificamos que tengamos una wallet conectada y el contrato SimpleDex inicializado
+        if (!address || !simpleDexContract) {
+            console.error("No hay wallet conectada o contrato inicializado");
+            return;
+        }
+
+        // Cargamos el ABI si no está disponible
+        if (!ERC20_ABI) {
+            await loadABI();
+        }
+
+        // Obtenemos las direcciones de los tokens desde el contrato SimpleDex
+        const tokenAAddress = await simpleDexContract.tokenA();
+        const tokenBAddress = await simpleDexContract.tokenB();
+
+        // Verificamos que el ABI esté cargado
+        if (!ERC20_ABI) {
+            throw new Error("No se pudo cargar el ABI de ERC20");
+        }
+
+        // Creamos instancias de los contratos de tokens
+        const tokenAContract = new ethers.Contract(tokenAAddress, ERC20_ABI, signer);
+        const tokenBContract = new ethers.Contract(tokenBAddress, ERC20_ABI, signer);
+
+        // Obtenemos los balances de los tokens
+        const balanceA = await tokenAContract.balanceOf(address);
+        const balanceB = await tokenBContract.balanceOf(address);
+
+        // Obtenemos los símbolos y decimales de los tokens
+        const symbolA = await tokenAContract.symbol();
+        const symbolB = await tokenBContract.symbol();
+        const decimalsA = await tokenAContract.decimals();
+        const decimalsB = await tokenBContract.decimals();
+
+        // Formateamos los balances
+        const formattedBalanceA = ethers.formatUnits(balanceA, decimalsA);
+        const formattedBalanceB = ethers.formatUnits(balanceB, decimalsB);
+
+        // Actualizamos la interfaz de usuario
+        document.getElementById("tokenABalance").textContent = `${symbolA} Balance: ${formattedBalanceA}`;
+        document.getElementById("tokenBBalance").textContent = `${symbolB} Balance: ${formattedBalanceB}`;
+
+        console.log(`Balances de tokens - ${symbolA}: ${formattedBalanceA}, ${symbolB}: ${formattedBalanceB}`);
+    } catch (error) {
+        console.error("Error al obtener balances de tokens:", error);
+
+        // Reseteamos los elementos de la interfaz en caso de error
+        document.getElementById("tokenABalance").textContent = "Token A Balance: Error";
+        document.getElementById("tokenBBalance").textContent = "Token B Balance: Error";
+    }
+}
+
 async function updateBalance() {
     try {
         // Verificamos que tengamos el provider y la dirección
@@ -60,6 +144,8 @@ async function connectWallet() {
 
         // Mostrar los balances cuando la wallet está conectada
         document.getElementById("ethBalance").style.display = "block";
+        // Mostrar balance de tokens
+        document.getElementById("tokenBalancesSection").style.display = "block";
 
         // Estoy mostrando los campos de agregar liquidez, intercambiar tokens, retirar liquidez y obtener precio
         document.getElementById("addLiquiditySection").style.display = "block";
@@ -81,11 +167,13 @@ async function connectWallet() {
 
         // Actualizamos el balance de la wallet
         await updateBalance();
+        // Actualizamos los balances de los tokens
+        await updateTokenBalances();
         // Actualizamos la reserva de la wallet
         await updateReserves();
         // Actualizamos 
         await updateExchangeRate();
-        
+
         // Estoy mostrando en la consola "Cuenta conectada" cuando se conecta la wallet
         console.log("connectWallet - Cuenta conectada");
     }
@@ -103,10 +191,21 @@ async function initializeSimpleDexContract() {
             return null;
         }
 
+        // Cargamos el ABI del IERC20 si aun no esta cargado
+        if (!ERC20_ABI) {
+            console.log("Intentando cargar ABI en initializeSimpleDexContract...");
+            try {
+                await loadABI();
+            } catch (loadError) {
+                console.error("Error al cargar ABI en initializeSimpleDexContract:", loadError);
+                return null;
+            }
+        }
+
         // Creamos la instancia del contrato usando ethers.js
         simpleDexContract = new ethers.Contract(
-            simpleDexContractAddress, 
-            simpleDexContractABI, 
+            simpleDexContractAddress,
+            simpleDexContractABI,
             signer
         );
 
@@ -136,6 +235,8 @@ async function disconnectWallet() {
 
     // Ocultar los balances cuando la wallet está desconectada
     document.getElementById("ethBalance").style.display = "none";
+    // Ocultar balance de tokens
+    document.getElementById("tokenBalancesSection").style.display = "none";
 
     document.getElementById("reservesSection").style.display = "none";
     document.getElementById("exchangeRateSection").style.display = "none";

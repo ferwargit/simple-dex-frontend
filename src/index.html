@@ -29,6 +29,23 @@
         <p id="ethBalance" class="text-center text-xl text-800 mt-6" style="display:none;">Balance de la Wallet: 0 ETH
         </p>
 
+        <!-- Balance de Tokens -->
+        <div id="tokenBalancesSection" class="mt-8" style="display:none;">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
+                <h2 class="text-2xl font-semibold text-white-800 mb-4">Balances de Tokens</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-white-700 font-medium">Token A:</span>
+                        <code id="tokenABalance" class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-white-700 font-medium">Token B:</span>
+                        <code id="tokenBBalance" class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Reservas Actuales en el Pool de Liquidez  -->
         <div id="reservesSection" class="mt-8" style="display:none;">
             <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
