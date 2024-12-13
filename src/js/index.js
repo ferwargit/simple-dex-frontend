@@ -575,6 +575,19 @@ async function swapTokenBforA() {
 }
 
 
+// Función para ocultar animaciones cuando se conecta la wallet
+function toggleAnimations() {
+    const animationsContainer = document.getElementById('animationsContainer');
+    const walletConnected = document.getElementById('walletStatusSection').classList.contains('wallet-connected');
+
+    if (animationsContainer && walletConnected) {
+        animationsContainer.style.display = 'none';
+    } else if (animationsContainer) {
+        animationsContainer.style.display = 'block';
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
@@ -586,3 +599,19 @@ document.getElementById("btnClearPrice").addEventListener("click", clearTokenPri
 // Agregamos el event listener para los botones de intercambio
 document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB);
 document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
+
+// Llama a toggleAnimations cuando cambie el estado de la wallet
+document.getElementById('btnConnect').addEventListener('click', () => {
+    // Añade una clase para indicar que la wallet está conectada
+    document.getElementById('walletStatusSection').classList.add('wallet-connected');
+    toggleAnimations();
+});
+
+document.getElementById('btnDisconnect').addEventListener('click', () => {
+    // Elimina la clase cuando se desconecta
+    document.getElementById('walletStatusSection').classList.remove('wallet-connected');
+    toggleAnimations();
+});
+
+// Llamar inicialmente para establecer el estado correcto
+toggleAnimations();

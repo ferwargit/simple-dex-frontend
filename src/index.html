@@ -7,18 +7,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/dist/heroicons.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/dist/heroicons.min.css" rel="stylesheet">
+    <style>
+        @keyframes moveText {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(calc(100vw + 100%));
+            }
+        }
+
+        .animated-text {
+            position: absolute;
+            left: 0;
+            width: max-content;
+            white-space: nowrap;
+            animation: moveText 12s linear infinite;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-900 text-white font-sans">
     <div class="container mx-auto p-6">
         <!-- Titulo -->
-        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">Simple DEX - Scroll Sepolia</h1>
+        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">Simple DEX</h1>
 
-        <!-- Botónes para conectar y desconectar la wallet -->
         <div class="flex justify-center px-6">
-            <button id="btnConnect"
-                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">Conectar
-                Wallet</button>
             <button id="btnDisconnect"
                 class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition ml-4"
                 style="display:none;">Desconectar Wallet</button>
@@ -26,7 +41,7 @@
 
         <!-- Estado de la wallet -->
         <div id="walletStatusSection" class="mt-8">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+            <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-semibold text-white-800 mb-4">Estado de la Wallet</h2>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -57,6 +72,36 @@
             </div>
         </div>
 
+        <br>
+        <br>
+
+        <!-- Botónes para conectar y desconectar la wallet -->
+        <div class="flex justify-center px-6">
+            <button id="btnConnect"
+                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">Conectar
+                Wallet</button>
+        </div>
+
+        <!-- Contenedor de animaciones -->
+        <div id="animationsContainer" class="relative">
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <div class="relative h-16 overflow-hidden mb-6">
+                <div class="animated-text text-4xl text-center" style="color: burlywood;">>>>Scroll Sepolia</div>
+            </div>
+            <div class="relative h-16 overflow-hidden mb-6">
+                <div class="animated-text2 text-4xl text-center">[ SimpleDEX - Exchange Descentralizado ]</div>
+            </div>
+            <div class="relative h-16 overflow-hidden mb-6">
+                <div class="animated-text text-4xl text-center" style="color: cadetblue;">Intercambio de Tokens>>></div>
+            </div>
+        </div>
+
         <!-- Contenedor principal con grid responsive -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -65,7 +110,7 @@
             <div class="space-y-6">
 
                 <!-- Direcciones de Tokens -->
-                <div id="tokensAddressSection" class="mt-8" style="display:none;">
+                <div id="tokensAddressSection" class="" style="display:none;">
                     <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Direcciones de Tokens</h2>
@@ -212,8 +257,8 @@
             <div class="space-y-6">
 
                 <!-- Balance de la wallet ETH -->
-                <div id="ethBalanceSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                <div id="ethBalanceSection" class="" style="display:none;">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Balance en ETH</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -235,7 +280,7 @@
 
                 <!-- Balance de Tokens -->
                 <div id="tokenBalancesSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Balances en Tokens</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
