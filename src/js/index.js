@@ -37,6 +37,7 @@ async function loadABI() {
     }
 }
 
+
 async function updateTokenBalances() {
     try {
         // Verificamos que tengamos una wallet conectada y el contrato SimpleDex inicializado
@@ -91,6 +92,7 @@ async function updateTokenBalances() {
     }
 }
 
+
 async function updateBalance() {
     try {
         // Verificamos que tengamos el provider y la dirección
@@ -104,13 +106,14 @@ async function updateBalance() {
         // Convertimos el balance a ETH
         const formattedBalance = ethers.formatEther(balance);
         // Actualizamos el balance en la UI
-        document.getElementById("ethBalance").innerText = `Balance de la Wallet: ${formattedBalance} ETH`;
+        document.getElementById("ethBalance").textContent = `${formattedBalance} ETH`;
 
         console.log("updateBalance - Balance actualizado:", formattedBalance);
     } catch (error) {
         console.error("updateBalance - Error al actualizar el balance:", error);
     }
 }
+
 
 async function connectWallet() {
     // Estoy mostrando en la consola "Conectando a la wallet..." cuando se hace click en el botón para verificar la llamada a la función
@@ -143,7 +146,7 @@ async function connectWallet() {
         document.getElementById("status").innerText = `Estado: Conectado a la cuenta ${address}`;
 
         // Mostrar los balances cuando la wallet está conectada
-        document.getElementById("ethBalance").style.display = "block";
+        document.getElementById("ethBalanceSection").style.display = "block";
         // Mostrar balance de tokens
         document.getElementById("tokenBalancesSection").style.display = "block";
 
@@ -183,6 +186,7 @@ async function connectWallet() {
     }
 }
 
+
 async function initializeSimpleDexContract() {
     try {
         // Verificamos que tengamos el signer antes de inicializar el contrato
@@ -217,6 +221,7 @@ async function initializeSimpleDexContract() {
     }
 }
 
+
 async function disconnectWallet() {
     console.log("Desconectando la wallet...");
 
@@ -234,7 +239,7 @@ async function disconnectWallet() {
     document.getElementById("status").innerText = "Estado: Desconectado";
 
     // Ocultar los balances cuando la wallet está desconectada
-    document.getElementById("ethBalance").style.display = "none";
+    document.getElementById("ethBalanceSection").style.display = "none";
     // Ocultar balance de tokens
     document.getElementById("tokenBalancesSection").style.display = "none";
 
@@ -250,6 +255,7 @@ async function disconnectWallet() {
 
     console.log("disconnectWallet - Cuenta desconectada");
 }
+
 
 async function updateReserves() {
     try {
@@ -273,6 +279,7 @@ async function updateReserves() {
     }
 }
 
+
 async function updateExchangeRate() {
     try {
         if (!simpleDexContract) {
@@ -294,6 +301,23 @@ async function updateExchangeRate() {
         console.error("updateExchangeRate - Error al actualizar las tasas de intercambio:", error);
     }
 }
+
+
+window.copyToClipboard = function(elementId) {
+    const element = document.getElementById(elementId);
+    navigator.clipboard.writeText(element.textContent).then(() => {
+        const tooltip = element.nextElementSibling;
+        if (tooltip) {
+            tooltip.textContent = '¡Copiado!';
+            tooltip.classList.remove('hidden');
+            setTimeout(() => {
+                tooltip.textContent = 'Copiar';
+                tooltip.classList.add('hidden');
+            }, 1500);
+        }
+    });
+}
+
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
