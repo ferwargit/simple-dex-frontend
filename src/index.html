@@ -237,7 +237,7 @@
                                 class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
                             <button id="btnSwapAforB"
                                 class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Intercambiar
-                                Token A por Token B</button>
+                                TK-A por TK-B</button>
                         </div>
                         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto mt-6">
                             <label for="amountBIn" class="block text-white-700">Cantidad de Token B</label>
@@ -245,7 +245,7 @@
                                 class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
                             <button id="btnSwapBforA"
                                 class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Intercambiar
-                                Token B por Token A</button>
+                                TK-B por TK-A</button>
                         </div>
                     </div>
                 </div>
@@ -352,9 +352,15 @@
                         <label for="amountB" class="block text-white-700 mt-4">Cantidad de Token B</label>
                         <input type="number" id="amountB" name="amountB" placeholder="Cantidad de Token B"
                             class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
-                        <button id="btnAddLiquidity"
-                            class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Agregar
-                            Liquidez</button>
+                        <div class="flex items-center justify-between">
+                            <button id="btnAddLiquidity"
+                                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Agregar
+                                Liquidez</button>
+                            <button id="btnShowLastLiquidityTransaction"
+                                class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
+                                Última Transacción
+                            </button>
+                        </div>
                     </div>
                 </div>
 

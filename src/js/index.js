@@ -2,6 +2,10 @@ import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethe
 import { CONFIG } from './config.js';
 
 let provider, signer, address, simpleDexContract;
+
+// Variable global para almacenar los detalles de la última transacción
+let lastLiquidityTransactionDetails = null;
+
 const simpleDexContractAddress = CONFIG.SIMPLE_DEX_CONTRACT_ADDRESS; // Dirección de tu contrato SimpleDEX
 console.log("simpleDexContractAddress:", simpleDexContractAddress);
 const simpleDexContractABI = CONFIG.SIMPLE_DEX_ABI;
@@ -633,6 +637,9 @@ async function addLiquidity() {
         // Actualizar balances de los tokens
         await updateTokenBalances();
 
+        // Mostrar detalles de la transacción
+        showLiquidityTransactionDetails(receipt, amountA, amountB);
+
         // Registrar mensaje de éxito
         console.log("Liquidez agregada exitosamente");
 
@@ -712,6 +719,73 @@ async function removeLiquidity() {
 }
 
 
+// Función para mostrar detalles de la transacción de liquidez
+function showLiquidityTransactionDetails(receipt, amountA, amountB) {
+    // Almacenar los detalles de la transacción
+    lastLiquidityTransactionDetails = { receipt, amountA, amountB };
+    
+    // Crear un modal o una sección de detalles de transacción
+    const transactionDetailsContainer = document.createElement('div');
+    transactionDetailsContainer.id = 'liquidityTransactionDetailsModal';
+    transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    
+    transactionDetailsContainer.innerHTML = `
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
+            <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Transacción</h2>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Hash de Transacción:</p>
+                <p class="break-words text-blue-400">${receipt.hash}</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Cantidad de Token A agregada:</p>
+                <p class="text-green-500">${amountA} Tokens</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Cantidad de Token B agregada:</p>
+                <p class="text-green-500">${amountB} Tokens</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Bloque:</p>
+                <p class="text-white-500">${receipt.blockNumber}</p>
+            </div>
+            
+            <button id="closeTransactionDetails" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">
+                Cerrar
+            </button>
+        </div>
+    `;
+    
+    // Eliminar cualquier modal existente
+    const existingModal = document.getElementById('liquidityTransactionDetailsModal');
+    if (existingModal) {
+        document.body.removeChild(existingModal);
+    }
+    
+    // Agregar al cuerpo del documento
+    document.body.appendChild(transactionDetailsContainer);
+    
+    // Agregar evento para cerrar el modal
+    document.getElementById('closeTransactionDetails').addEventListener('click', () => {
+        document.body.removeChild(transactionDetailsContainer);
+    });
+}
+
+
+// Función para abrir los detalles de la última transacción
+function openLastLiquidityTransactionDetails() {
+    if (lastLiquidityTransactionDetails) {
+        const { receipt, amountA, amountB } = lastLiquidityTransactionDetails;
+        showLiquidityTransactionDetails(receipt, amountA, amountB);
+    } else {
+        console.error("No hay detalles de transacción reciente");
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
@@ -725,6 +799,9 @@ document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB
 document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
 // Agregar event listener al botón de agregar liquidez
 document.getElementById("btnAddLiquidity").addEventListener("click", addLiquidity);
+// 
+document.getElementById('btnShowLastLiquidityTransaction').addEventListener('click', openLastLiquidityTransactionDetails);
+
 // Agregar event listener al botón de retirar liquidez
 document.getElementById("btnRemoveLiquidity").addEventListener("click", removeLiquidity);
 
