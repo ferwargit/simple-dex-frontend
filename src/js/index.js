@@ -915,7 +915,8 @@ function openLastAddLiquidityTransactionDetails() {
         const { receipt, amountA, amountB } = lastLiquidityAddTransactionDetails;
         showLiquidityAddTransactionDetails(receipt, amountA, amountB);
     } else {
-        console.error("No hay detalles de transacción reciente");
+        console.error("No hay detalles de transacción de adición de liquidez reciente");
+        mostrarMensajeNoTransaccion('addLiquidity');
     }
 }
 
@@ -983,6 +984,7 @@ function openLastLiquidityRemovalTransactionDetails() {
         showLiquidityRemovalTransactionDetails(receipt, removeAmountA, removeAmountB);
     } else {
         console.error("No hay detalles de transacción de retiro de liquidez reciente");
+        mostrarMensajeNoTransaccion('removeLiquidity');
     }
 }
 
@@ -1045,6 +1047,7 @@ function openLastSwapAforBTransactionDetails() {
         showSwapAforBTransactionDetails(receipt, amountAIn);
     } else {
         console.error("No hay detalles de transacción de intercambio de Token A por Token B reciente");
+        mostrarMensajeNoTransaccion('swapAforB');
     }
 }
 
@@ -1107,6 +1110,7 @@ function openLastSwapBforATransactionDetails() {
         showSwapBforATransactionDetails(receipt, amountBIn);
     } else {
         console.error("No hay detalles de transacción de intercambio de Token B por Token A reciente");
+        mostrarMensajeNoTransaccion('swapBforA');
     }
 }
 
@@ -1237,6 +1241,39 @@ function mostrarMensajeErrorLiquidity(inputIds) {
 }
 
 
+// Función para mostrar mensaje cuando no hay transacciones previas
+function mostrarMensajeNoTransaccion(tipoTransaccion) {
+    // Eliminar cualquier mensaje de error existente
+    const existingErrorElement = document.getElementById('noTransactionError');
+    if (existingErrorElement) {
+        existingErrorElement.remove();
+    }
+
+    // Crear elemento de error
+    const errorElement = document.createElement('div');
+    errorElement.id = 'noTransactionError';
+    errorElement.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
+    
+    // Mensajes personalizados según el tipo de transacción
+    const mensajes = {
+        'swapAforB': "No hay transacciones previas de intercambio de Token A por Token B",
+        'swapBforA': "No hay transacciones previas de intercambio de Token B por Token A",
+        'addLiquidity': "No hay transacciones previas de adición de liquidez",
+        'removeLiquidity': "No hay transacciones previas de retiro de liquidez"
+    };
+
+    errorElement.textContent = mensajes[tipoTransaccion] || "No hay transacciones previas";
+
+    // Agregar al cuerpo del documento
+    document.body.appendChild(errorElement);
+
+    // Eliminar el mensaje después de 3 segundos
+    setTimeout(() => {
+        if (errorElement.parentNode) {
+            document.body.removeChild(errorElement);
+        }
+    }, 3500);
+}
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
