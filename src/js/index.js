@@ -8,6 +8,11 @@ let lastLiquidityAddTransactionDetails = null;
 // Variable global para almacenar los detalles de la última transacción de retiro de liquidez
 let lastLiquidityRemovalTransactionDetails = null;
 
+// Variable global para almacenar los detalles de la última transacción de intercambio de Token A por Token B
+let lastSwapAforBTransactionDetails = null;
+// Variable global para almacenar los detalles de la última transacción de intercambio de Token B por Token A
+let lastSwapBforATransactionDetails = null;
+
 const simpleDexContractAddress = CONFIG.SIMPLE_DEX_CONTRACT_ADDRESS; // Dirección de tu contrato SimpleDEX
 console.log("simpleDexContractAddress:", simpleDexContractAddress);
 const simpleDexContractABI = CONFIG.SIMPLE_DEX_ABI;
@@ -508,6 +513,9 @@ async function swapTokenAforB() {
         // Esperar confirmación de la transacción
         const receipt = await tx.wait();
 
+        // Mostrar detalles de la transacción de intercambio
+        showSwapAforBTransactionDetails(receipt, amountAIn);
+
         console.log("Intercambio de Token A a Token B exitoso:", receipt);
 
         // Limpiar input
@@ -557,6 +565,9 @@ async function swapTokenBforA() {
 
         // Esperar confirmación de la transacción
         const receipt = await tx.wait();
+
+        // Mostrar detalles de la transacción de intercambio
+        showSwapBforATransactionDetails(receipt, amountBIn);
 
         console.log("Intercambio de Token B a Token A exitoso:", receipt);
 
@@ -858,6 +869,129 @@ function openLastLiquidityRemovalTransactionDetails() {
 }
 
 
+// Función para mostrar detalles de la transacción de intercambio de Token A por Token B
+function showSwapAforBTransactionDetails(receipt, amountAIn) {
+    // Almacenar los detalles de la transacción
+    lastSwapAforBTransactionDetails = { receipt, amountAIn };
+    
+    // Crear un modal o una sección de detalles de transacción
+    const transactionDetailsContainer = document.createElement('div');
+    transactionDetailsContainer.id = 'swapAforBTransactionDetailsModal';
+    transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    
+    transactionDetailsContainer.innerHTML = `
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
+            <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Intercambio TK-A por TK-B</h2>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Hash de Transacción:</p>
+                <p class="break-words text-blue-400">${receipt.hash}</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Cantidad de Token A intercambiada:</p>
+                <p class="text-green-500">${amountAIn} Tokens</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Bloque:</p>
+                <p class="text-white-500">${receipt.blockNumber}</p>
+            </div>
+            
+            <button id="closeSwapAforBTransactionDetails" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">
+                Cerrar
+            </button>
+        </div>
+    `;
+    
+    // Eliminar cualquier modal existente
+    const existingModal = document.getElementById('swapAforBTransactionDetailsModal');
+    if (existingModal) {
+        document.body.removeChild(existingModal);
+    }
+    
+    // Agregar al cuerpo del documento
+    document.body.appendChild(transactionDetailsContainer);
+    
+    // Agregar evento para cerrar el modal
+    document.getElementById('closeSwapAforBTransactionDetails').addEventListener('click', () => {
+        document.body.removeChild(transactionDetailsContainer);
+    });
+}
+
+
+// Función para abrir los detalles de la última transacción de intercambio de Token A por Token B
+function openLastSwapAforBTransactionDetails() {
+    if (lastSwapAforBTransactionDetails) {
+        const { receipt, amountAIn } = lastSwapAforBTransactionDetails;
+        showSwapAforBTransactionDetails(receipt, amountAIn);
+    } else {
+        console.error("No hay detalles de transacción de intercambio de Token A por Token B reciente");
+    }
+}
+
+
+// Función para mostrar detalles de la transacción de intercambio de Token B por Token A
+function showSwapBforATransactionDetails(receipt, amountBIn) {
+    // Almacenar los detalles de la transacción
+    lastSwapBforATransactionDetails = { receipt, amountBIn };
+    
+    // Crear un modal o una sección de detalles de transacción
+    const transactionDetailsContainer = document.createElement('div');
+    transactionDetailsContainer.id = 'swapBforATransactionDetailsModal';
+    transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    
+    transactionDetailsContainer.innerHTML = `
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
+            <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Intercambio TK-B por TK-A</h2>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Hash de Transacción:</p>
+                <p class="break-words text-blue-400">${receipt.hash}</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Cantidad de Token B intercambiada:</p>
+                <p class="text-green-500">${amountBIn} Tokens</p>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-white-700">Bloque:</p>
+                <p class="text-white-500">${receipt.blockNumber}</p>
+            </div>
+            
+            <button id="closeSwapBforATransactionDetails" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">
+                Cerrar
+            </button>
+        </div>
+    `;
+    
+    // Eliminar cualquier modal existente
+    const existingModal = document.getElementById('swapBforATransactionDetailsModal');
+    if (existingModal) {
+        document.body.removeChild(existingModal);
+    }
+    
+    // Agregar al cuerpo del documento
+    document.body.appendChild(transactionDetailsContainer);
+    
+    // Agregar evento para cerrar el modal
+    document.getElementById('closeSwapBforATransactionDetails').addEventListener('click', () => {
+        document.body.removeChild(transactionDetailsContainer);
+    });
+}
+
+
+// Función para abrir los detalles de la última transacción de intercambio de Token B por Token A
+function openLastSwapBforATransactionDetails() {
+    if (lastSwapBforATransactionDetails) {
+        const { receipt, amountBIn } = lastSwapBforATransactionDetails;
+        showSwapBforATransactionDetails(receipt, amountBIn);
+    } else {
+        console.error("No hay detalles de transacción de intercambio de Token B por Token A reciente");
+    }
+}
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
@@ -881,6 +1015,10 @@ document.getElementById("btnRemoveLiquidity").addEventListener("click", removeLi
 // Agregar event listener al botón de mostrar última transacción de retiro de liquidez
 document.getElementById('btnShowLastLiquidityTransaction').addEventListener('click', openLastLiquidityRemovalTransactionDetails);
 
+// Agregar event listener al botón de mostrar última transacción de intercambio de Token A por Token B
+document.getElementById('btnShowLastSwapAforBTransaction').addEventListener('click', openLastSwapAforBTransactionDetails);
+// Agregar event listener al botón de mostrar última transacción de intercambio de Token B por Token A
+document.getElementById('btnShowLastSwapBforATransaction').addEventListener('click', openLastSwapBforATransactionDetails);
 
 // Llama a toggleAnimations cuando cambie el estado de la wallet
 document.getElementById('btnConnect').addEventListener('click', () => {
@@ -888,9 +1026,8 @@ document.getElementById('btnConnect').addEventListener('click', () => {
     document.getElementById('walletStatusSection').classList.add('wallet-connected');
     toggleAnimations();
 });
-
+// Elimina la clase cuando se desconecta
 document.getElementById('btnDisconnect').addEventListener('click', () => {
-    // Elimina la clase cuando se desconecta
     document.getElementById('walletStatusSection').classList.remove('wallet-connected');
     toggleAnimations();
 });
