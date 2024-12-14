@@ -535,7 +535,7 @@ function clearTokenPrice() {
 
 
 async function swapTokenAforB() {
-    let toast;
+    
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
@@ -550,9 +550,11 @@ async function swapTokenAforB() {
         // Validaciones
         if (!amountAIn || isNaN(amountAIn) || Number(amountAIn) <= 0) {
             console.error("Cantidad de Token A inválida");
+            mostrarMensajeErrorSwap("Cantidad de Token A inválida", "amountAIn");
             return;
         }
 
+        let toast;
         // Mostrar toast de transacción en progreso
         toast = showTransactionToast("Procesando intercambio de Token A por Token B...");
 
@@ -601,7 +603,7 @@ async function swapTokenAforB() {
 
 
 async function swapTokenBforA() {
-    let toast;
+    
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
@@ -616,9 +618,11 @@ async function swapTokenBforA() {
         // Validaciones
         if (!amountBIn || isNaN(amountBIn) || Number(amountBIn) <= 0) {
             console.error("Cantidad de Token B inválida");
+            mostrarMensajeErrorSwap("Cantidad de Token B inválida", "amountBIn");
             return;
         }
 
+        let toast;
         // Mostrar toast de transacción en progreso
         toast = showTransactionToast("Procesando intercambio de Token B por Token A...");
 
@@ -634,6 +638,9 @@ async function swapTokenBforA() {
         // Mostrar detalles de la transacción de intercambio
         showSwapBforATransactionDetails(receipt, amountBIn);
 
+        // Eliminar toast de transacción al completarse
+        removeTransactionToast();
+
         console.log("Intercambio de Token B a Token A exitoso:", receipt);
 
         // Limpiar input
@@ -645,9 +652,6 @@ async function swapTokenBforA() {
             updateTokenBalances(),
             updateReserves()
         ]);
-
-        // Eliminar toast de transacción al completarse
-        removeTransactionToast();
 
     } catch (error) {
         console.error("Error en el intercambio de Token B por Token A:", error);
@@ -1123,6 +1127,7 @@ function showTransactionToast(message, type = 'info') {
     return toast;
 }
 
+
 // Función para eliminar el toast
 function removeTransactionToast() {
     const existingToast = document.getElementById('transactionToast');
@@ -1130,6 +1135,35 @@ function removeTransactionToast() {
         existingToast.remove();
     }
 }
+
+
+// Función para mostrar mensajes de error en intercambios de tokens
+function mostrarMensajeErrorSwap(mensaje, inputId) {
+    // Eliminar cualquier mensaje de error existente
+    const existingErrorElement = document.getElementById(`${inputId}Error`);
+    if (existingErrorElement) {
+        existingErrorElement.remove();
+    }
+
+    // Crear elemento de error
+    const errorElement = document.createElement('div');
+    errorElement.id = `${inputId}Error`;
+    errorElement.className = 'text-red-500 text-sm mt-2';
+    errorElement.textContent = mensaje;
+
+    // Encontrar el contenedor del input
+    const inputContainer = document.getElementById(inputId).parentNode;
+    inputContainer.appendChild(errorElement);
+
+    // Agregar evento para limpiar el mensaje cuando se haga foco en el input
+    const inputElement = document.getElementById(inputId);
+    const clearErrorHandler = () => {
+        errorElement.remove();
+        inputElement.removeEventListener('focus', clearErrorHandler);
+    };
+    inputElement.addEventListener('focus', clearErrorHandler);
+}
+
 
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
