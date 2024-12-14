@@ -535,7 +535,7 @@ function clearTokenPrice() {
 
 
 async function swapTokenAforB() {
-    
+
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
@@ -603,7 +603,7 @@ async function swapTokenAforB() {
 
 
 async function swapTokenBforA() {
-    
+
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
@@ -728,6 +728,21 @@ async function addLiquidity() {
             signer
         );
 
+        // Obtener direcciones de tokens
+        const tokenAAddress = await simpleDexContract.tokenA();
+        const tokenBAddress = await simpleDexContract.tokenB();
+
+        // Crear contratos de tokens
+        const tokenAContract = new ethers.Contract(tokenAAddress, ERC20_ABI, signer);
+        const tokenBContract = new ethers.Contract(tokenBAddress, ERC20_ABI, signer);
+
+        // Aprobar tokens antes de agregar liquidez
+        const approveTokenATx = await tokenAContract.approve(simpleDexContractAddress, amountAWei);
+        await approveTokenATx.wait();
+
+        const approveTokenBTx = await tokenBContract.approve(simpleDexContractAddress, amountBWei);
+        await approveTokenBTx.wait();
+
         // Llamar a la función addLiquidity del contrato
         const tx = await simpleDexContract.addLiquidity(amountAWei, amountBWei);
 
@@ -760,6 +775,13 @@ async function addLiquidity() {
     } catch (error) {
         // Manejar errores
         console.error("Error al agregar liquidez:", error);
+        // Mostrar detalles específicos del error
+        console.log("Error details:", {
+            message: error.message,
+            code: error.code,
+            reason: error.reason,
+            data: error.data
+        });
         removeTransactionToast();
         // Mostrar toast de error
         showTransactionToast("Error al agregar liquidez", 'error');
@@ -769,7 +791,7 @@ async function addLiquidity() {
 
 // Función para retirar liquidez del DEX
 async function removeLiquidity() {
-    
+
     try {
         // Validar que la wallet esté conectada
         if (!signer) {
@@ -813,6 +835,21 @@ async function removeLiquidity() {
             signer
         );
 
+        // Obtener direcciones de tokens
+        const tokenAAddress = await simpleDexContract.tokenA();
+        const tokenBAddress = await simpleDexContract.tokenB();
+
+        // Crear contratos de tokens
+        const tokenAContract = new ethers.Contract(tokenAAddress, ERC20_ABI, signer);
+        const tokenBContract = new ethers.Contract(tokenBAddress, ERC20_ABI, signer);
+
+        // Aprobar tokens de liquidez antes de retirar
+        const approveTokenATx = await tokenAContract.approve(simpleDexContractAddress, removeAmountAWei);
+        await approveTokenATx.wait();
+
+        const approveTokenBTx = await tokenBContract.approve(simpleDexContractAddress, removeAmountBWei);
+        await approveTokenBTx.wait();
+
         // Llamar a la función removeLiquidity del contrato
         const tx = await simpleDexContract.removeLiquidity(removeAmountAWei, removeAmountBWei);
 
@@ -845,6 +882,15 @@ async function removeLiquidity() {
     } catch (error) {
         // Manejar errores
         console.error("Error al retirar liquidez:", error);
+
+        // Mostrar detalles específicos del error
+        console.log("Error details:", {
+            message: error.message,
+            code: error.code,
+            reason: error.reason,
+            data: error.data
+        });
+
         removeTransactionToast();
 
         // Mostrar toast de error
@@ -1119,7 +1165,7 @@ function openLastSwapBforATransactionDetails() {
 function showTransactionToast(message, type = 'info') {
     // Verificar si ya existe un toast
     let existingToast = document.getElementById('transactionToast');
-    
+
     // Actualizar el mensaje y el tipo del toast existente
     if (existingToast) {
         // Clases base y de estilo según el tipo
@@ -1223,9 +1269,9 @@ function mostrarMensajeErrorSwap(mensaje, inputId) {
 function mostrarMensajeErrorLiquidity(inputIds) {
     inputIds.forEach(inputId => {
         let mensaje = '';
-        
+
         // Determinar mensaje específico según el input
-        switch(inputId) {
+        switch (inputId) {
             case 'amountA':
                 mensaje = "Por favor, ingresa una cantidad válida para el Token A";
                 break;
@@ -1280,7 +1326,7 @@ function mostrarMensajeNoTransaccion(tipoTransaccion) {
     errorElement.id = 'noTransactionError';
     // errorElement.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
     errorElement.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
-    
+
 
     // Mensajes personalizados según el tipo de transacción
     const mensajes = {
