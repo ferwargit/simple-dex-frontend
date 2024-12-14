@@ -588,6 +588,68 @@ function toggleAnimations() {
 }
 
 
+// Función para agregar liquidez al DEX
+async function addLiquidity() {
+    try {
+        // Validar que la wallet esté conectada
+        if (!signer) {
+            console.error("Por favor, conecta tu wallet primero");
+            return;
+        }
+
+        // Obtener valores de los inputs
+        const amountA = document.getElementById('amountA').value;
+        const amountB = document.getElementById('amountB').value;
+
+        // Validar que los montos no estén vacíos
+        if (!amountA || !amountB) {
+            console.error("Por favor, ingresa cantidades válidas para ambos tokens");
+            return;
+        }
+
+        // Convertir montos a formato wei (asumiendo 18 decimales)
+        const amountAWei = ethers.parseUnits(amountA, 18);
+        const amountBWei = ethers.parseUnits(amountB, 18);
+
+        // Crear contrato con signer
+        const simpleDexContract = new ethers.Contract(
+            simpleDexContractAddress, 
+            simpleDexContractABI, 
+            signer
+        );
+
+        // Llamar a la función addLiquidity del contrato
+        const tx = await simpleDexContract.addLiquidity(amountAWei, amountBWei);
+        
+        // Esperar la confirmación de la transacción
+        const receipt = await tx.wait();
+
+        // Actualizar reservas después de agregar liquidez
+        await updateReserves();
+
+        // Actualizar tasa de intercambio
+        await updateExchangeRate();
+
+        // Actualizar balances de los tokens
+        await updateTokenBalances();
+
+        // Registrar mensaje de éxito
+        console.log("Liquidez agregada exitosamente");
+
+        // Limpiar los campos de entrada
+        document.getElementById('amountA').value = '';
+        document.getElementById('amountB').value = '';
+
+        // Registrar detalles de la transacción
+        console.log("Liquidez agregada. Hash de transacción:", receipt.hash);
+
+    } catch (error) {
+        // Manejar errores
+        console.error("Error al agregar liquidez:", error);
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
@@ -599,6 +661,8 @@ document.getElementById("btnClearPrice").addEventListener("click", clearTokenPri
 // Agregamos el event listener para los botones de intercambio
 document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB);
 document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
+// Agregar event listener al botón de agregar liquidez
+document.getElementById("btnAddLiquidity").addEventListener("click", addLiquidity);
 
 // Llama a toggleAnimations cuando cambie el estado de la wallet
 document.getElementById('btnConnect').addEventListener('click', () => {
