@@ -446,27 +446,72 @@ async function getTokenPrice() {
             return;
         }
 
-        // Llamamos a la función getPrice del contrato
-        const price = await simpleDexContract.getPrice(tokenAddress);
+        // Validar formato de dirección Ethereum usando ethers.js
+        try {
+            const addressChecksum = ethers.getAddress(tokenAddress);
+            
+            // Llamamos a la función getPrice del contrato
+            const price = await simpleDexContract.getPrice(addressChecksum);
 
-        // Formateamos el precio (asumiendo 18 decimales)
-        const formattedPrice = ethers.formatUnits(price, 18);
+            // Formateamos el precio (asumiendo 18 decimales)
+            const formattedPrice = ethers.formatUnits(price, 18);
 
-        // Mostramos el precio en la interfaz (puedes agregar un elemento para esto)
-        console.log(`Precio del token: ${formattedPrice}`);
+            // Mostrar el precio en la interfaz
+            document.getElementById("tokenPrice").textContent = `Precio: ${formattedPrice}`;
 
-        // Mostrar el precio en la interfaz
-        document.getElementById("tokenPrice").textContent = `Precio: ${formattedPrice}`;
+            // Limpiar cualquier mensaje de error previo
+            limpiarMensajeError();
+
+        } catch (addressError) {
+            // Manejar errores de formato de dirección
+            mostrarMensajeError("Dirección de token inválida");
+            document.getElementById("tokenPrice").textContent = "-";
+        }
 
     } catch (error) {
         console.error("Error al obtener el precio del token:", error);
-
-        // Manejo de errores específicos
-        if (error.code === "INVALID_ARGUMENT") {
-            console.error("Dirección de token inválida");
-        }
+        mostrarMensajeError("Error al obtener el precio del token");
+        document.getElementById("tokenPrice").textContent = "-";
     }
 }
+
+// Función para mostrar mensajes de error
+function mostrarMensajeError(mensaje) {
+    // Crear o encontrar un elemento para mostrar errores
+    let errorElement = document.getElementById('tokenAddressError');
+    if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.id = 'tokenAddressError';
+        errorElement.className = 'text-red-500 text-sm mt-2';
+        document.querySelector('#tokenAddress').parentNode.appendChild(errorElement);
+    }
+    errorElement.textContent = mensaje;
+}
+
+// Función para limpiar mensajes de error
+function limpiarMensajeError() {
+    const errorElement = document.getElementById('tokenAddressError');
+    if (errorElement) {
+        errorElement.textContent = '';
+    }
+}
+
+// Agregar un event listener para validar en tiempo real
+document.getElementById('tokenAddress').addEventListener('input', function() {
+    const tokenAddress = this.value.trim();
+    
+    // Validación en tiempo real
+    if (tokenAddress) {
+        try {
+            ethers.getAddress(tokenAddress);
+            limpiarMensajeError();
+        } catch (error) {
+            mostrarMensajeError("Formato de dirección inválido");
+        }
+    } else {
+        limpiarMensajeError();
+    }
+});
 
 
 function clearTokenPrice() {
@@ -481,6 +526,8 @@ function clearTokenPrice() {
     if (tokenPriceElement) {
         tokenPriceElement.textContent = "-";
     }
+
+    limpiarMensajeError();
 
     console.log("Precio del token y dirección limpiados");
 }
