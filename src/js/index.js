@@ -450,7 +450,7 @@ async function getTokenPrice() {
         // Validar formato de dirección Ethereum usando ethers.js
         try {
             const addressChecksum = ethers.getAddress(tokenAddress);
-            
+
             // Llamamos a la función getPrice del contrato
             const price = await simpleDexContract.getPrice(addressChecksum);
 
@@ -498,9 +498,9 @@ function limpiarMensajeError() {
 }
 
 // Agregar un event listener para validar en tiempo real
-document.getElementById('tokenAddress').addEventListener('input', function() {
+document.getElementById('tokenAddress').addEventListener('input', function () {
     const tokenAddress = this.value.trim();
-    
+
     // Validación en tiempo real
     if (tokenAddress) {
         try {
@@ -543,9 +543,6 @@ async function swapTokenAforB() {
             return;
         }
 
-        // Mostrar toast de transacción en progreso
-        toast = showTransactionToast("Procesando intercambio de Token A por Token B...");
-
         // Obtener la cantidad de Token A a intercambiar
         const amountAInput = document.getElementById("amountAIn");
         const amountAIn = amountAInput.value.trim();
@@ -555,6 +552,9 @@ async function swapTokenAforB() {
             console.error("Cantidad de Token A inválida");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Procesando intercambio de Token A por Token B...");
 
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountAInWei = ethers.parseUnits(amountAIn, 18);
@@ -609,9 +609,6 @@ async function swapTokenBforA() {
             return;
         }
 
-        // Mostrar toast de transacción en progreso
-        toast = showTransactionToast("Procesando intercambio de Token B por Token A...");
-
         // Obtener la cantidad de Token B a intercambiar
         const amountBInput = document.getElementById("amountBIn");
         const amountBIn = amountBInput.value.trim();
@@ -621,6 +618,9 @@ async function swapTokenBforA() {
             console.error("Cantidad de Token B inválida");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Procesando intercambio de Token B por Token A...");
 
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountBInWei = ethers.parseUnits(amountBIn, 18);
@@ -681,6 +681,7 @@ function toggleAnimations() {
 
 // Función para agregar liquidez al DEX
 async function addLiquidity() {
+    let toast;
     try {
         // Validar que la wallet esté conectada
         if (!signer) {
@@ -697,6 +698,9 @@ async function addLiquidity() {
             console.error("Por favor, ingresa cantidades válidas para ambos tokens");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Agregando liquidez...");
 
         // Convertir montos a formato wei (asumiendo 18 decimales)
         const amountAWei = ethers.parseUnits(amountA, 18);
@@ -737,8 +741,12 @@ async function addLiquidity() {
         // Registrar detalles de la transacción
         console.log("Liquidez agregada. Hash de transacción:", receipt.hash);
 
+        // Eliminar toast de transacción
+        removeTransactionToast();
+
     } catch (error) {
         // Manejar errores
+        removeTransactionToast();
         console.error("Error al agregar liquidez:", error);
     }
 }
@@ -746,6 +754,7 @@ async function addLiquidity() {
 
 // Función para retirar liquidez del DEX
 async function removeLiquidity() {
+    let toast;
     try {
         // Validar que la wallet esté conectada
         if (!signer) {
@@ -762,6 +771,9 @@ async function removeLiquidity() {
             console.error("Por favor, ingresa cantidades válidas para ambos tokens");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Retirando liquidez...");
 
         // Convertir montos a formato wei (asumiendo 18 decimales)
         const removeAmountAWei = ethers.parseUnits(removeAmountA, 18);
@@ -802,8 +814,12 @@ async function removeLiquidity() {
         // Registrar detalles de la transacción
         console.log("Liquidez retirada. Hash de transacción:", receipt.hash);
 
+        // Eliminar toast de transacción
+        removeTransactionToast();
+
     } catch (error) {
         // Manejar errores
+        removeTransactionToast();
         console.error("Error al retirar liquidez:", error);
     }
 }
@@ -813,12 +829,12 @@ async function removeLiquidity() {
 function showLiquidityAddTransactionDetails(receipt, amountA, amountB) {
     // Almacenar los detalles de la transacción
     lastLiquidityAddTransactionDetails = { receipt, amountA, amountB };
-    
+
     // Crear un modal o una sección de detalles de transacción
     const transactionDetailsContainer = document.createElement('div');
     transactionDetailsContainer.id = 'liquidityTransactionDetailsModal';
     transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-    
+
     transactionDetailsContainer.innerHTML = `
         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
             <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Transacción</h2>
@@ -848,16 +864,16 @@ function showLiquidityAddTransactionDetails(receipt, amountA, amountB) {
             </button>
         </div>
     `;
-    
+
     // Eliminar cualquier modal existente
     const existingModal = document.getElementById('liquidityTransactionDetailsModal');
     if (existingModal) {
         document.body.removeChild(existingModal);
     }
-    
+
     // Agregar al cuerpo del documento
     document.body.appendChild(transactionDetailsContainer);
-    
+
     // Agregar evento para cerrar el modal
     document.getElementById('closeTransactionDetails').addEventListener('click', () => {
         document.body.removeChild(transactionDetailsContainer);
@@ -880,12 +896,12 @@ function openLastAddLiquidityTransactionDetails() {
 function showLiquidityRemovalTransactionDetails(receipt, removeAmountA, removeAmountB) {
     // Almacenar los detalles de la transacción
     lastLiquidityRemovalTransactionDetails = { receipt, removeAmountA, removeAmountB };
-    
+
     // Crear un modal o una sección de detalles de transacción
     const transactionDetailsContainer = document.createElement('div');
     transactionDetailsContainer.id = 'liquidityRemovalTransactionDetailsModal';
     transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-    
+
     transactionDetailsContainer.innerHTML = `
         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
             <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Retiro de Liquidez</h2>
@@ -915,16 +931,16 @@ function showLiquidityRemovalTransactionDetails(receipt, removeAmountA, removeAm
             </button>
         </div>
     `;
-    
+
     // Eliminar cualquier modal existente
     const existingModal = document.getElementById('liquidityRemovalTransactionDetailsModal');
     if (existingModal) {
         document.body.removeChild(existingModal);
     }
-    
+
     // Agregar al cuerpo del documento
     document.body.appendChild(transactionDetailsContainer);
-    
+
     // Agregar evento para cerrar el modal
     document.getElementById('closeRemovalTransactionDetails').addEventListener('click', () => {
         document.body.removeChild(transactionDetailsContainer);
@@ -947,12 +963,12 @@ function openLastLiquidityRemovalTransactionDetails() {
 function showSwapAforBTransactionDetails(receipt, amountAIn) {
     // Almacenar los detalles de la transacción
     lastSwapAforBTransactionDetails = { receipt, amountAIn };
-    
+
     // Crear un modal o una sección de detalles de transacción
     const transactionDetailsContainer = document.createElement('div');
     transactionDetailsContainer.id = 'swapAforBTransactionDetailsModal';
     transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-    
+
     transactionDetailsContainer.innerHTML = `
         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
             <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Intercambio TK-A por TK-B</h2>
@@ -977,16 +993,16 @@ function showSwapAforBTransactionDetails(receipt, amountAIn) {
             </button>
         </div>
     `;
-    
+
     // Eliminar cualquier modal existente
     const existingModal = document.getElementById('swapAforBTransactionDetailsModal');
     if (existingModal) {
         document.body.removeChild(existingModal);
     }
-    
+
     // Agregar al cuerpo del documento
     document.body.appendChild(transactionDetailsContainer);
-    
+
     // Agregar evento para cerrar el modal
     document.getElementById('closeSwapAforBTransactionDetails').addEventListener('click', () => {
         document.body.removeChild(transactionDetailsContainer);
@@ -1009,12 +1025,12 @@ function openLastSwapAforBTransactionDetails() {
 function showSwapBforATransactionDetails(receipt, amountBIn) {
     // Almacenar los detalles de la transacción
     lastSwapBforATransactionDetails = { receipt, amountBIn };
-    
+
     // Crear un modal o una sección de detalles de transacción
     const transactionDetailsContainer = document.createElement('div');
     transactionDetailsContainer.id = 'swapBforATransactionDetailsModal';
     transactionDetailsContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-    
+
     transactionDetailsContainer.innerHTML = `
         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-md w-full">
             <h2 class="text-2xl font-semibold text-white-800 mb-4">Detalles de Intercambio TK-B por TK-A</h2>
@@ -1039,16 +1055,16 @@ function showSwapBforATransactionDetails(receipt, amountBIn) {
             </button>
         </div>
     `;
-    
+
     // Eliminar cualquier modal existente
     const existingModal = document.getElementById('swapBforATransactionDetailsModal');
     if (existingModal) {
         document.body.removeChild(existingModal);
     }
-    
+
     // Agregar al cuerpo del documento
     document.body.appendChild(transactionDetailsContainer);
-    
+
     // Agregar evento para cerrar el modal
     document.getElementById('closeSwapBforATransactionDetails').addEventListener('click', () => {
         document.body.removeChild(transactionDetailsContainer);
@@ -1078,7 +1094,7 @@ function showTransactionToast(message, type = 'info') {
     // Crear el elemento del toast
     const toast = document.createElement('div');
     toast.id = 'transactionToast';
-    
+
     // Clases base y de estilo según el tipo
     const baseClasses = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
     const typeClasses = {
@@ -1088,7 +1104,7 @@ function showTransactionToast(message, type = 'info') {
     };
 
     toast.className = `${baseClasses} ${typeClasses[type]}`;
-    
+
     // Contenido del toast
     toast.innerHTML = `
         <div class="flex items-center">
