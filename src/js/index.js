@@ -442,6 +442,7 @@ async function getTokenPrice() {
 
         // Validamos que se haya ingresado una dirección
         if (!tokenAddress) {
+            mostrarMensajeError("Por favor ingrese una dirección de token");
             console.error("Por favor ingrese una dirección de token");
             return;
         }
