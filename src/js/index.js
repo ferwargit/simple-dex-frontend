@@ -535,12 +535,16 @@ function clearTokenPrice() {
 
 
 async function swapTokenAforB() {
+    let toast;
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
             console.error("El contrato SimpleDex no está inicializado");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Procesando intercambio de Token A por Token B...");
 
         // Obtener la cantidad de Token A a intercambiar
         const amountAInput = document.getElementById("amountAIn");
@@ -564,6 +568,9 @@ async function swapTokenAforB() {
         // Mostrar detalles de la transacción de intercambio
         showSwapAforBTransactionDetails(receipt, amountAIn);
 
+        // Eliminar toast de transacción
+        removeTransactionToast();
+
         console.log("Intercambio de Token A a Token B exitoso:", receipt);
 
         // Limpiar input
@@ -579,6 +586,12 @@ async function swapTokenAforB() {
     } catch (error) {
         console.error("Error en el intercambio de Token A por Token B:", error);
 
+        // Eliminar toast de transacción
+        removeTransactionToast();
+
+        // Mostrar toast de error
+        showTransactionToast("Error en el intercambio de Token A por Token B", 'error');
+
         // Manejo de errores específicos
         if (error.code === "ACTION_REJECTED") {
             console.log("Transacción cancelada por el usuario");
@@ -588,12 +601,16 @@ async function swapTokenAforB() {
 
 
 async function swapTokenBforA() {
+    let toast;
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
             console.error("El contrato SimpleDex no está inicializado");
             return;
         }
+
+        // Mostrar toast de transacción en progreso
+        toast = showTransactionToast("Procesando intercambio de Token B por Token A...");
 
         // Obtener la cantidad de Token B a intercambiar
         const amountBInput = document.getElementById("amountBIn");
@@ -629,8 +646,17 @@ async function swapTokenBforA() {
             updateReserves()
         ]);
 
+        // Eliminar toast de transacción al completarse
+        removeTransactionToast();
+
     } catch (error) {
         console.error("Error en el intercambio de Token B por Token A:", error);
+
+        // Eliminar toast de transacción
+        removeTransactionToast();
+
+        // Mostrar toast de error
+        showTransactionToast("Error en el intercambio de Token B por Token A", 'error');
 
         // Manejo de errores específicos
         if (error.code === "ACTION_REJECTED") {
@@ -1039,6 +1065,56 @@ function openLastSwapBforATransactionDetails() {
         console.error("No hay detalles de transacción de intercambio de Token B por Token A reciente");
     }
 }
+
+
+// Función para mostrar un toast de transacción en progreso
+function showTransactionToast(message, type = 'info') {
+    // Eliminar cualquier toast existente
+    const existingToast = document.getElementById('transactionToast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    // Crear el elemento del toast
+    const toast = document.createElement('div');
+    toast.id = 'transactionToast';
+    
+    // Clases base y de estilo según el tipo
+    const baseClasses = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
+    const typeClasses = {
+        'info': 'bg-blue-500 text-white',
+        'success': 'bg-green-500 text-white',
+        'error': 'bg-red-500 text-white'
+    };
+
+    toast.className = `${baseClasses} ${typeClasses[type]}`;
+    
+    // Contenido del toast
+    toast.innerHTML = `
+        <div class="flex items-center">
+            <span class="mr-2">${message}</span>
+            <div class="animate-spin">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </div>
+        </div>
+    `;
+
+    // Agregar al cuerpo del documento
+    document.body.appendChild(toast);
+
+    return toast;
+}
+
+// Función para eliminar el toast
+function removeTransactionToast() {
+    const existingToast = document.getElementById('transactionToast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+}
+
 
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
