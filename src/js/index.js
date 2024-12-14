@@ -325,8 +325,8 @@ async function updateReserves() {
         const reserveA = await simpleDexContract.reserveA();
         const reserveB = await simpleDexContract.reserveB();
 
-        document.getElementById("reserveA").innerText = `Reserva de Token A: ${ethers.formatUnits(reserveA, 18)}`;
-        document.getElementById("reserveB").innerText = `Reserva de Token B: ${ethers.formatUnits(reserveB, 18)}`;
+        document.getElementById("reserveA").innerText = `${ethers.formatUnits(reserveA, 18)}`;
+        document.getElementById("reserveB").innerText = `${ethers.formatUnits(reserveB, 18)}`;
 
         console.log("updateReserves - Reservas actualizadas:", {
             reserveA: ethers.formatUnits(reserveA, 18),

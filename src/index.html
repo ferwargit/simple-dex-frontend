@@ -31,7 +31,7 @@
 <body class="bg-gray-900 text-white font-sans">
     <div class="container mx-auto p-6">
         <!-- Titulo -->
-        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">[ Simple DEX ]</h1>
+        <h1 class="text-4xl font-semibold text-center text-white mb-6">[ Simple DEX ]</h1>
 
         <div class="flex justify-center px-6">
             <button id="btnDisconnect"
@@ -41,7 +41,8 @@
 
         <!-- Estado de la wallet -->
         <div id="walletStatusSection" class="mt-8">
-            <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+            <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-pink-400/50 border border-pink-400 max-w-[580px] mx-auto">
+                
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-semibold text-white-800 mb-4">Estado de la Wallet</h2>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -52,18 +53,18 @@
                 </div>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-white-700 font-medium">Estado de Conexión:</span>
+                        <span class="text-white-700 font-medium">Estado de Conexión</span>
                         <code id="status"
                             class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">Desconectado</code>
                     </div>
-                    <div id="accountDetails" class="space-y-2" style="display:none;">
+                    <div id="accountDetails" class="space-y-4" style="display:none;">
                         <div class="flex items-center justify-between">
-                            <span class="text-white-700 font-medium">Cuenta:</span>
+                            <span class="text-white-700 font-medium">Cuenta</span>
                             <code id="connectedAccount"
                                 class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono truncate max-w-[370px]">-</code>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-white-700 font-medium">Red:</span>
+                            <span class="text-white-700 font-medium">Red</span>
                             <code id="connectedNetwork"
                                 class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">-</code>
                         </div>
@@ -92,14 +93,14 @@
             <br>
 
             <div class="relative h-16 overflow-hidden mb-6">
-                <div class="animated-text text-4xl text-center" style="color: burlywood;">>>>Scroll Sepolia</div>
+                <div class="animated-text text-4xl text-center" style="color: burlywood;">>>> Scroll Sepolia</div>
             </div>
             <div class="relative h-16 overflow-hidden mb-6">
                 <div class="animated-text2 text-4xl text-center" style="color: violet;">[ Exchange Descentralizado ]
                 </div>
             </div>
             <div class="relative h-16 overflow-hidden mb-6">
-                <div class="animated-text text-4xl text-center" style="color: cadetblue;">Intercambio de Tokens>>></div>
+                <div class="animated-text text-4xl text-center" style="color: cadetblue;">Intercambio de Tokens >>></div>
             </div>
         </div>
 
@@ -110,9 +111,31 @@
             <!-- Columna Izquierda -->
             <div class="space-y-6">
 
+                <!-- Balance de la wallet ETH -->
+                <div id="ethBalanceSection" class="" style="display:none;">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-orange-500/50 border border-orange-500 max-w-[580px] mx-auto">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Balance - ETH</h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-6 h-6 mr-3 text-orange-500 mb-4">
+                                <path
+                                    d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
+                                <path fill-rule="evenodd"
+                                    d="M6.75 2.25A.75.75 0 0 1 7.5 1.5h9a.75.75 0 0 1 .75.75v3.75a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3V2.25Zm9 9.75a3 3 0 0 0 3-3v-.75h2.25a.75.75 0 0 0 0-1.5H19.5a.75.75 0 0 0-.75.75v1.5a1.5 1.5 0 0 1-1.5 1.5h-9a1.5 1.5 0 0 1-1.5-1.5v-1.5a.75.75 0 0 0-.75-.75H4.5a.75.75 0 0 0 0 1.5H6.75v.75a3 3 0 0 0 3 3h9Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white-700 font-medium">Wallet Balance</span>
+                            <code id="ethBalance"
+                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0 ETH</code>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Direcciones de Tokens -->
                 <div id="tokensAddressSection" class="" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-red-500/50 border border-red-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Direcciones de Tokens</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -124,7 +147,7 @@
                         </div>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Token A:</span>
+                                <span class="text-white-700 font-medium">Token A</span>
                                 <div class="relative group">
                                     <code id="tokenAAddress"
                                         class="bg-gray-700 px-3 py-1.5 rounded-md text-sm truncate max-w-[250px] font-mono cursor-copy"
@@ -136,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Token B:</span>
+                                <span class="text-white-700 font-medium">Token B</span>
                                 <div class="relative group">
                                     <code id="tokenBAddress"
                                         class="bg-gray-700 px-3 py-1.5 rounded-md text-sm truncate max-w-[250px] font-mono cursor-copy"
@@ -153,7 +176,7 @@
 
                 <!-- Obtener Precio -->
                 <div id="getPriceSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md mt-6 border border-white max-w-[580px] mx-auto">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-cyan-500/50 mt-6 border border-cyan-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Obtener Precio</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -184,7 +207,7 @@
                                 </button>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Precio del Token:</span>
+                                <span class="text-white-700 font-medium">Precio del Token</span>
                                 <code id="tokenPrice"
                                     class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">-</code>
                             </div>
@@ -192,11 +215,87 @@
                     </div>
                 </div>
 
+                <!-- Intercambiar Tokens -->
+                <div id="swapTokensSection" class="mt-8" style="display:none;">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-violet-500/50 mt-6 border border-violet-500 max-w-[580px] mx-auto">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Intercambiar Tokens</h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-6 h-6 mr-3 text-violet-500 mb-4">
+                                <path fill-rule="evenodd"
+                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-violet-500 max-w-lg mx-auto">
+                            <label for="amountAIn" class="block text-white-700">Cantidad de Token A</label>
+                            <input type="number" id="amountAIn" name="amountAIn" placeholder="Cantidad de Token A"
+                                class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
+                            <div class="flex items-center justify-between">
+                                <button id="btnSwapAforB"
+                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">TK-A por TK-B</button>
+                                <button id="btnShowLastSwapAforBTransaction"
+                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
+                                    Última Transacción
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-violet-500 max-w-lg mx-auto mt-6">
+                            <label for="amountBIn" class="block text-white-700">Cantidad de Token B</label>
+                            <input type="number" id="amountBIn" name="amountBIn" placeholder="Cantidad de Token B"
+                                class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
+                            <div class="flex items-center justify-between">
+                                <button id="btnSwapBforA"
+                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">TK-B por TK-A</button>
+                                <button id="btnShowLastSwapBforATransaction"
+                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
+                                    Última Transacción
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Columna Derecha -->
+            <div class="space-y-6">
+
+                <!-- Balance de Tokens -->
+                <div id="tokenBalancesSection" class="" style="display:none;">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-yellow-500/50 border border-yellow-500 max-w-[580px] mx-auto">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Balance - Tokens</h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-6 h-6 mr-3 text-yellow-500 mb-4">
+                                <path
+                                    d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579 1.004 0 .324-.152.692-.579 1.013a2.54 2.54 0 0 1-.921.39Z" />
+                                <path fill-rule="evenodd"
+                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.242 2.242 0 0 1-.879-.532c-.411-.41-.577-.97-.577-1.489a.75.75 0 0 0-1.5 0c0 .89.362 1.691.986 2.314.624.625 1.49.986 2.383.986v.75a.75.75 0 0 0 1.5 0v-.75a3.836 3.836 0 0 0 1.72-.756c.712-.566 1.112-1.35 1.112-2.178 0-.829-.4-1.612-1.113-2.178a3.808 3.808 0 0 0-1.719-.756V6.904c.466.141.861.406 1.14.743a.75.75 0 1 0 1.138-.97A4.817 4.817 0 0 0 12.75 5.25v-.75Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-white-700 font-medium">Token A</span>
+                                <code id="tokenABalance"
+                                    class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-white-700 font-medium">Token B</span>
+                                <code id="tokenBBalance"
+                                    class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Tasas de intercambio actualizadas -->
                 <div id="exchangeRateSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-lime-500/50 border border-lime-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Tasas de intercambio actualizadas
+                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Tasas de intercambio
                             </h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 mr-3 text-lime-500 mb-4">
@@ -220,111 +319,11 @@
                     </div>
                 </div>
 
-                <!-- Intercambiar Tokens -->
-                <div id="swapTokensSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md mt-6 border border-white max-w-[580px] mx-auto">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Intercambiar Tokens</h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-violet-500 mb-4">
-                                <path fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto">
-                            <label for="amountAIn" class="block text-white-700">Cantidad de Token A</label>
-                            <input type="number" id="amountAIn" name="amountAIn" placeholder="Cantidad de Token A"
-                                class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
-                            <div class="flex items-center justify-between">
-                                <button id="btnSwapAforB"
-                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">Intercambiar
-                                    TK-A por TK-B</button>
-                                <button id="btnShowLastSwapAforBTransaction"
-                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
-                                    Última Transacción
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto mt-6">
-                            <label for="amountBIn" class="block text-white-700">Cantidad de Token B</label>
-                            <input type="number" id="amountBIn" name="amountBIn" placeholder="Cantidad de Token B"
-                                class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
-                            <div class="flex items-center justify-between">
-                                <button id="btnSwapBforA"
-                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">Intercambiar
-                                    TK-B por TK-A</button>
-                                <button id="btnShowLastSwapBforATransaction"
-                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
-                                    Última Transacción
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- Columna Derecha -->
-            <div class="space-y-6">
-
-                <!-- Balance de la wallet ETH -->
-                <div id="ethBalanceSection" class="" style="display:none;">
-                    <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Balance en ETH</h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-orange-500 mb-4">
-                                <path
-                                    d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-                                <path fill-rule="evenodd"
-                                    d="M6.75 2.25A.75.75 0 0 1 7.5 1.5h9a.75.75 0 0 1 .75.75v3.75a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3V2.25Zm9 9.75a3 3 0 0 0 3-3v-.75h2.25a.75.75 0 0 0 0-1.5H19.5a.75.75 0 0 0-.75.75v1.5a1.5 1.5 0 0 1-1.5 1.5h-9a1.5 1.5 0 0 1-1.5-1.5v-1.5a.75.75 0 0 0-.75-.75H4.5a.75.75 0 0 0 0 1.5H6.75v.75a3 3 0 0 0 3 3h9Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-white-700 font-medium">Wallet Balance:</span>
-                            <code id="ethBalance"
-                                class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0 ETH</code>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Balance de Tokens -->
-                <div id="tokenBalancesSection" class="mt-8" style="display:none;">
-                    <div class="bg-black-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Balances en Tokens</h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-yellow-500 mb-4">
-                                <path
-                                    d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579 1.004 0 .324-.152.692-.579 1.013a2.54 2.54 0 0 1-.921.39Z" />
-                                <path fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.242 2.242 0 0 1-.879-.532c-.411-.41-.577-.97-.577-1.489a.75.75 0 0 0-1.5 0c0 .89.362 1.691.986 2.314.624.625 1.49.986 2.383.986v.75a.75.75 0 0 0 1.5 0v-.75a3.836 3.836 0 0 0 1.72-.756c.712-.566 1.112-1.35 1.112-2.178 0-.829-.4-1.612-1.113-2.178a3.808 3.808 0 0 0-1.719-.756V6.904c.466.141.861.406 1.14.743a.75.75 0 1 0 1.138-.97A4.817 4.817 0 0 0 12.75 5.25v-.75Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Token A:</span>
-                                <code id="tokenABalance"
-                                    class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Token B:</span>
-                                <code id="tokenBBalance"
-                                    class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Reservas en el Pool de Liquidez -->
                 <div id="reservesSection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-black-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-blue-500/50 border border-blue-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Reservas en el Pool de Liquidez</h2>
+                            <h2 class="text-2xl font-semibold text-white-800 mb-4">Reservas</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 mr-3 text-blue-500 mb-4">
                                 <path fill-rule="evenodd"
@@ -334,12 +333,12 @@
                         </div>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Reserva de Token A:</span>
+                                <span class="text-white-700 font-medium">Reserva de Token A</span>
                                 <code id="reserveA"
                                     class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-white-700 font-medium">Reserva de Token B:</span>
+                                <span class="text-white-700 font-medium">Reserva de Token B</span>
                                 <code id="reserveB"
                                     class="bg-gray-700 px-3 py-1.5 rounded-md text-sm font-mono">0</code>
                             </div>
@@ -349,7 +348,7 @@
 
                 <!-- Agregar Liquidez -->
                 <div id="addLiquiditySection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-teal-500/50 border border-teal-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Agregar Liquidez</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -379,7 +378,7 @@
 
                 <!-- Retirar Liquidez -->
                 <div id="removeLiquiditySection" class="mt-8" style="display:none;">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-[580px] mx-auto">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-[4px_-4px_8px_0px] shadow-teal-500/50 border border-teal-500 max-w-[580px] mx-auto">
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Retirar Liquidez</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
