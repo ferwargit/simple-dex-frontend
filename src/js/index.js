@@ -556,7 +556,7 @@ async function swapTokenAforB() {
 
         let toast;
         // Mostrar toast de transacción en progreso
-        toast = showTransactionToast("Procesando intercambio de Token A por Token B...");
+        toast = showTransactionToast("Procesando intercambio de Token A por Token B...", "swap");
 
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountAInWei = ethers.parseUnits(amountAIn, 18);
@@ -624,7 +624,7 @@ async function swapTokenBforA() {
 
         let toast;
         // Mostrar toast de transacción en progreso
-        toast = showTransactionToast("Procesando intercambio de Token B por Token A...");
+        toast = showTransactionToast("Procesando intercambio de Token B por Token A...", "swap");
 
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountBInWei = ethers.parseUnits(amountBIn, 18);
@@ -1117,42 +1117,68 @@ function openLastSwapBforATransactionDetails() {
 
 // Función para mostrar un toast de transacción en progreso
 function showTransactionToast(message, type = 'info') {
-    // Eliminar cualquier toast existente
-    const existingToast = document.getElementById('transactionToast');
+    // Verificar si ya existe un toast
+    let existingToast = document.getElementById('transactionToast');
+    
+    // Actualizar el mensaje y el tipo del toast existente
     if (existingToast) {
-        existingToast.remove();
+        // Clases base y de estilo según el tipo
+        const baseClasses = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
+        const typeClasses = {
+            'info': 'bg-teal-500 text-white',
+            'success': 'bg-green-500 text-white',
+            'error': 'bg-red-500 text-white',
+            'swap': 'bg-violet-500 text-white'
+        };
+
+        // Aplicar clases según el tipo, con fallback a 'info'
+        existingToast.className = `${baseClasses} ${typeClasses[type] || typeClasses['info']}`;
+
+        // Actualizar contenido del toast con ícono animado
+        existingToast.innerHTML = `
+            <div class="flex items-center">
+                <span class="mr-2">${message}</span>
+                <div class="animate-spin">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.001 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </div>
+            </div>
+        `;
+    } else {
+        // Crear el elemento del toast si no existe
+        existingToast = document.createElement('div');
+        existingToast.id = 'transactionToast';
+
+        // Clases base y de estilo según el tipo
+        const baseClasses = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
+        const typeClasses = {
+            'info': 'bg-teal-500 text-white',
+            'success': 'bg-green-500 text-white',
+            'error': 'bg-red-500 text-white',
+            'swap': 'bg-violet-500 text-white'
+        };
+
+        // Aplicar clases según el tipo, con fallback a 'info'
+        existingToast.className = `${baseClasses} ${typeClasses[type] || typeClasses['info']}`;
+
+        // Contenido del toast con ícono animado
+        existingToast.innerHTML = `
+            <div class="flex items-center">
+                <span class="mr-2">${message}</span>
+                <div class="animate-spin">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.001 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </div>
+            </div>
+        `;
+
+        // Agregar al cuerpo del documento
+        document.body.appendChild(existingToast);
     }
 
-    // Crear el elemento del toast
-    const toast = document.createElement('div');
-    toast.id = 'transactionToast';
-
-    // Clases base y de estilo según el tipo
-    const baseClasses = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
-    const typeClasses = {
-        'info': 'bg-blue-500 text-white',
-        'success': 'bg-green-500 text-white',
-        'error': 'bg-red-500 text-white'
-    };
-
-    toast.className = `${baseClasses} ${typeClasses[type]}`;
-
-    // Contenido del toast
-    toast.innerHTML = `
-        <div class="flex items-center">
-            <span class="mr-2">${message}</span>
-            <div class="animate-spin">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-            </div>
-        </div>
-    `;
-
-    // Agregar al cuerpo del documento
-    document.body.appendChild(toast);
-
-    return toast;
+    return existingToast;
 }
 
 
@@ -1252,8 +1278,10 @@ function mostrarMensajeNoTransaccion(tipoTransaccion) {
     // Crear elemento de error
     const errorElement = document.createElement('div');
     errorElement.id = 'noTransactionError';
-    errorElement.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
+    // errorElement.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
+    errorElement.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg bg-orange-500 text-white';
     
+
     // Mensajes personalizados según el tipo de transacción
     const mensajes = {
         'swapAforB': "No hay transacciones previas de intercambio de Token A por Token B",
