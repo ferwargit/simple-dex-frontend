@@ -603,7 +603,6 @@ async function swapTokenAforB() {
 
 
 async function swapTokenBforA() {
-
     try {
         // Verificamos que el contrato SimpleDex esté inicializado
         if (!simpleDexContract) {
@@ -629,11 +628,43 @@ async function swapTokenBforA() {
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountBInWei = ethers.parseUnits(amountBIn, 18);
 
+        // Obtener direcciones de tokens
+        const tokenAAddress = await simpleDexContract.tokenA();
+        const tokenBAddress = await simpleDexContract.tokenB();
+
+        // Crear contratos de tokens
+        const tokenAContract = new ethers.Contract(tokenAAddress, ERC20_ABI, signer);
+        const tokenBContract = new ethers.Contract(tokenBAddress, ERC20_ABI, signer);
+
+        // Verificar saldo de Token B
+        const balanceB = await tokenBContract.balanceOf(await signer.getAddress());
+
+        // Verificar si hay suficiente saldo
+        if (amountBInWei > balanceB) {
+            throw new Error("Saldo insuficiente de Token B");
+        }
+
+        // Aprobar tokens antes del intercambio
+        const approveTokenBTx = await tokenBContract.approve(simpleDexContractAddress, amountBInWei);
+        await approveTokenBTx.wait();
+
+        // Logging adicional para depuración
+        console.log("Parámetros de intercambio:", {
+            amountBIn,
+            amountBInWei: amountBInWei.toString(),
+            balanceB: balanceB.toString()
+        });
+
         // Llamar a la función de intercambio del contrato
         const tx = await simpleDexContract.swapBforA(amountBInWei);
 
         // Esperar confirmación de la transacción
         const receipt = await tx.wait();
+
+        // Validación adicional de la transacción
+        if (!receipt || !receipt.status) {
+            throw new Error("La transacción de intercambio no se completó correctamente");
+        }
 
         // Mostrar detalles de la transacción de intercambio
         showSwapBforATransactionDetails(receipt, amountBIn);
@@ -656,11 +687,19 @@ async function swapTokenBforA() {
     } catch (error) {
         console.error("Error en el intercambio de Token B por Token A:", error);
 
+        // Mostrar detalles específicos del error
+        console.log("Error details:", {
+            message: error.message,
+            code: error.code,
+            reason: error.reason,
+            data: error.data
+        });
+
         // Eliminar toast de transacción
         removeTransactionToast();
 
-        // Mostrar toast de error
-        showTransactionToast("Error en el intercambio de Token B por Token A", 'error');
+        // Mostrar toast de error con mensaje específico
+        showTransactionToast(`Error en el intercambio: ${error.message}`, 'error');
 
         // Manejo de errores específicos
         if (error.code === "ACTION_REJECTED") {
