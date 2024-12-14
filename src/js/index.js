@@ -613,14 +613,14 @@ async function addLiquidity() {
 
         // Crear contrato con signer
         const simpleDexContract = new ethers.Contract(
-            simpleDexContractAddress, 
-            simpleDexContractABI, 
+            simpleDexContractAddress,
+            simpleDexContractABI,
             signer
         );
 
         // Llamar a la función addLiquidity del contrato
         const tx = await simpleDexContract.addLiquidity(amountAWei, amountBWei);
-        
+
         // Esperar la confirmación de la transacción
         const receipt = await tx.wait();
 
@@ -650,6 +650,68 @@ async function addLiquidity() {
 }
 
 
+// Función para retirar liquidez del DEX
+async function removeLiquidity() {
+    try {
+        // Validar que la wallet esté conectada
+        if (!signer) {
+            console.error("Por favor, conecta tu wallet primero");
+            return;
+        }
+
+        // Obtener valores de los inputs
+        const removeAmountA = document.getElementById('removeAmountA').value;
+        const removeAmountB = document.getElementById('removeAmountB').value;
+
+        // Validar que los montos no estén vacíos
+        if (!removeAmountA || !removeAmountB) {
+            console.error("Por favor, ingresa cantidades válidas para ambos tokens");
+            return;
+        }
+
+        // Convertir montos a formato wei (asumiendo 18 decimales)
+        const removeAmountAWei = ethers.parseUnits(removeAmountA, 18);
+        const removeAmountBWei = ethers.parseUnits(removeAmountB, 18);
+
+        // Crear contrato con signer
+        const simpleDexContract = new ethers.Contract(
+            simpleDexContractAddress,
+            simpleDexContractABI,
+            signer
+        );
+
+        // Llamar a la función removeLiquidity del contrato
+        const tx = await simpleDexContract.removeLiquidity(removeAmountAWei, removeAmountBWei);
+
+        // Esperar la confirmación de la transacción
+        const receipt = await tx.wait();
+
+        // Actualizar reservas después de retirar liquidez
+        await updateReserves();
+
+        // Actualizar tasa de intercambio
+        await updateExchangeRate();
+
+        // Actualizar balances de tokens
+        await updateTokenBalances();
+
+        // Registrar mensaje de éxito
+        console.log("Liquidez retirada exitosamente");
+
+        // Limpiar los campos de entrada
+        document.getElementById('removeAmountA').value = '';
+        document.getElementById('removeAmountB').value = '';
+
+        // Registrar detalles de la transacción
+        console.log("Liquidez retirada. Hash de transacción:", receipt.hash);
+
+    } catch (error) {
+        // Manejar errores
+        console.error("Error al retirar liquidez:", error);
+    }
+}
+
+
 // Estoy buscando el "btnConnect" y le estoy diciendo que cuando se haga click, se ejecute la función "connectWallet"
 document.getElementById("btnConnect").addEventListener("click", connectWallet);
 // Agregamos el event listener para el botón de obtener precio
@@ -663,6 +725,9 @@ document.getElementById("btnSwapAforB").addEventListener("click", swapTokenAforB
 document.getElementById("btnSwapBforA").addEventListener("click", swapTokenBforA);
 // Agregar event listener al botón de agregar liquidez
 document.getElementById("btnAddLiquidity").addEventListener("click", addLiquidity);
+// Agregar event listener al botón de retirar liquidez
+document.getElementById("btnRemoveLiquidity").addEventListener("click", removeLiquidity);
+
 
 // Llama a toggleAnimations cuando cambie el estado de la wallet
 document.getElementById('btnConnect').addEventListener('click', () => {
