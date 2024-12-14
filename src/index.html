@@ -23,7 +23,7 @@
             left: 0;
             width: max-content;
             white-space: nowrap;
-            animation: moveText 12s linear infinite;
+            animation: moveText 14s linear infinite;
         }
     </style>
 </head>
@@ -31,7 +31,7 @@
 <body class="bg-gray-900 text-white font-sans">
     <div class="container mx-auto p-6">
         <!-- Titulo -->
-        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">Simple DEX</h1>
+        <h1 class="text-4xl font-bold text-center text-white-800 mb-6">[ Simple DEX ]</h1>
 
         <div class="flex justify-center px-6">
             <button id="btnDisconnect"
@@ -95,7 +95,8 @@
                 <div class="animated-text text-4xl text-center" style="color: burlywood;">>>>Scroll Sepolia</div>
             </div>
             <div class="relative h-16 overflow-hidden mb-6">
-                <div class="animated-text2 text-4xl text-center">[ SimpleDEX - Exchange Descentralizado ]</div>
+                <div class="animated-text2 text-4xl text-center" style="color: violet;">[ Exchange Descentralizado ]
+                </div>
             </div>
             <div class="relative h-16 overflow-hidden mb-6">
                 <div class="animated-text text-4xl text-center" style="color: cadetblue;">Intercambio de Tokens>>></div>
@@ -115,7 +116,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Direcciones de Tokens</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-blue-400 mb-4">
+                                class="w-6 h-6 mr-3 text-red-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
                                     clip-rule="evenodd" />
@@ -156,7 +157,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Obtener Precio</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-green-400 mb-4">
+                                class="w-6 h-6 mr-3 text-cyan-500 mb-4">
                                 <path
                                     d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.000 0 .324-.152.692-.579 1.013a2.54 2.54 0 0 1-.921.39Z" />
                                 <path fill-rule="evenodd"
@@ -174,7 +175,7 @@
                             </div>
                             <div class="flex space-x-4">
                                 <button id="btnGetPrice"
-                                    class="flex-1 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">
+                                    class="flex-1 bg-cyan-500 text-white px-6 py-2 rounded-md hover:bg-cyan-600 transition">
                                     Obtener Precio
                                 </button>
                                 <button id="btnClearPrice"
@@ -198,7 +199,7 @@
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Tasas de intercambio actualizadas
                             </h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-purple-400 mb-4">
+                                class="w-6 h-6 mr-3 text-lime-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM9 7.5l7.5 4.5-7.5 4.5V7.5Z"
                                     clip-rule="evenodd" />
@@ -225,7 +226,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Intercambiar Tokens</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-indigo-400 mb-4">
+                                class="w-6 h-6 mr-3 text-violet-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
                                     clip-rule="evenodd" />
@@ -235,17 +236,29 @@
                             <label for="amountAIn" class="block text-white-700">Cantidad de Token A</label>
                             <input type="number" id="amountAIn" name="amountAIn" placeholder="Cantidad de Token A"
                                 class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
-                            <button id="btnSwapAforB"
-                                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Intercambiar
-                                TK-A por TK-B</button>
+                            <div class="flex items-center justify-between">
+                                <button id="btnSwapAforB"
+                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">Intercambiar
+                                    TK-A por TK-B</button>
+                                <button id="btnShowLastSwapAforBTransaction"
+                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
+                                    Última Transacción
+                                </button>
+                            </div>
                         </div>
                         <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-white max-w-lg mx-auto mt-6">
                             <label for="amountBIn" class="block text-white-700">Cantidad de Token B</label>
                             <input type="number" id="amountBIn" name="amountBIn" placeholder="Cantidad de Token B"
                                 class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
-                            <button id="btnSwapBforA"
-                                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Intercambiar
-                                TK-B por TK-A</button>
+                            <div class="flex items-center justify-between">
+                                <button id="btnSwapBforA"
+                                    class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition mt-4">Intercambiar
+                                    TK-B por TK-A</button>
+                                <button id="btnShowLastSwapBforATransaction"
+                                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
+                                    Última Transacción
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,7 +275,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Balance en ETH</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-blue-500 mb-4">
+                                class="w-6 h-6 mr-3 text-orange-500 mb-4">
                                 <path
                                     d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
                                 <path fill-rule="evenodd"
@@ -313,7 +326,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Reservas en el Pool de Liquidez</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-teal-400 mb-4">
+                                class="w-6 h-6 mr-3 text-blue-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM8.25 12c0-.414.336-.75.75-.75h6a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Zm0 3a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z"
                                     clip-rule="evenodd" />
@@ -340,7 +353,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Agregar Liquidez</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-green-500 mb-4">
+                                class="w-6 h-6 mr-3 text-teal-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
                                     clip-rule="evenodd" />
@@ -354,7 +367,7 @@
                             class="w-full mt-2 p-2 border border-white-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
                         <div class="flex items-center justify-between">
                             <button id="btnAddLiquidity"
-                                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Agregar
+                                class="bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition mt-4">Agregar
                                 Liquidez</button>
                             <button id="btnShowLastAddLiquidityTransaction"
                                 class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
@@ -370,7 +383,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-2xl font-semibold text-white-800 mb-4">Retirar Liquidez</h2>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 mr-3 text-red-400 mb-4">
+                                class="w-6 h-6 mr-3 text-teal-500 mb-4">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
                                     clip-rule="evenodd" />
@@ -385,7 +398,7 @@
 
                         <div class="flex items-center justify-between">
                             <button id="btnRemoveLiquidity"
-                                class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition mt-4">Retirar
+                                class="bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition mt-4">Retirar
                                 Liquidez</button>
                             <button id="btnShowLastLiquidityTransaction"
                                 class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition mt-4">
