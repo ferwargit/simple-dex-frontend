@@ -685,24 +685,35 @@ function toggleAnimations() {
 
 // Función para agregar liquidez al DEX
 async function addLiquidity() {
-    let toast;
     try {
         // Validar que la wallet esté conectada
         if (!signer) {
             console.error("Por favor, conecta tu wallet primero");
+            mostrarMensajeErrorLiquidity(['amountA', 'amountB']);
             return;
         }
 
         // Obtener valores de los inputs
-        const amountA = document.getElementById('amountA').value;
-        const amountB = document.getElementById('amountB').value;
+        const amountA = document.getElementById('amountA').value.trim();
+        const amountB = document.getElementById('amountB').value.trim();
 
-        // Validar que los montos no estén vacíos
-        if (!amountA || !amountB) {
-            console.error("Por favor, ingresa cantidades válidas para ambos tokens");
+        // Validaciones individuales para cada token
+        const errores = [];
+        if (!amountA || isNaN(amountA) || Number(amountA) <= 0) {
+            errores.push('amountA');
+        }
+        if (!amountB || isNaN(amountB) || Number(amountB) <= 0) {
+            errores.push('amountB');
+        }
+
+        // Si hay errores, mostrar mensajes específicos
+        if (errores.length > 0) {
+            console.error("Por favor, ingresa cantidades válidas para los tokens");
+            mostrarMensajeErrorLiquidity(errores);
             return;
         }
 
+        let toast;
         // Mostrar toast de transacción en progreso
         toast = showTransactionToast("Agregando liquidez...");
 
@@ -723,14 +734,12 @@ async function addLiquidity() {
         // Esperar la confirmación de la transacción
         const receipt = await tx.wait();
 
-        // Actualizar reservas después de agregar liquidez
-        await updateReserves();
-
-        // Actualizar tasa de intercambio
-        await updateExchangeRate();
-
-        // Actualizar balances de los tokens
-        await updateTokenBalances();
+        // Actualizar reservas, tasas de intercambio y balances
+        await Promise.all([
+            updateReserves(),
+            updateExchangeRate(),
+            updateTokenBalances()
+        ]);
 
         // Mostrar detalles de la transacción
         showLiquidityAddTransactionDetails(receipt, amountA, amountB);
@@ -750,32 +759,46 @@ async function addLiquidity() {
 
     } catch (error) {
         // Manejar errores
-        removeTransactionToast();
         console.error("Error al agregar liquidez:", error);
+        removeTransactionToast();
+        // Mostrar toast de error
+        showTransactionToast("Error al agregar liquidez", 'error');
     }
 }
 
 
 // Función para retirar liquidez del DEX
 async function removeLiquidity() {
-    let toast;
+    
     try {
         // Validar que la wallet esté conectada
         if (!signer) {
             console.error("Por favor, conecta tu wallet primero");
+            mostrarMensajeErrorLiquidity(['removeAmountA', 'removeAmountB']);;
             return;
         }
 
         // Obtener valores de los inputs
-        const removeAmountA = document.getElementById('removeAmountA').value;
-        const removeAmountB = document.getElementById('removeAmountB').value;
+        const removeAmountA = document.getElementById('removeAmountA').value.trim();
+        const removeAmountB = document.getElementById('removeAmountB').value.trim();
 
-        // Validar que los montos no estén vacíos
-        if (!removeAmountA || !removeAmountB) {
-            console.error("Por favor, ingresa cantidades válidas para ambos tokens");
+        // Validaciones individuales para cada token
+        const errores = [];
+        if (!removeAmountA || isNaN(removeAmountA) || Number(removeAmountA) <= 0) {
+            errores.push('removeAmountA');
+        }
+        if (!removeAmountB || isNaN(removeAmountB) || Number(removeAmountB) <= 0) {
+            errores.push('removeAmountB');
+        }
+
+        // Si hay errores, mostrar mensajes específicos
+        if (errores.length > 0) {
+            console.error("Por favor, ingresa cantidades válidas para los tokens");
+            mostrarMensajeErrorLiquidity(errores);
             return;
         }
 
+        let toast;
         // Mostrar toast de transacción en progreso
         toast = showTransactionToast("Retirando liquidez...");
 
@@ -796,14 +819,12 @@ async function removeLiquidity() {
         // Esperar la confirmación de la transacción
         const receipt = await tx.wait();
 
-        // Actualizar reservas después de retirar liquidez
-        await updateReserves();
-
-        // Actualizar tasa de intercambio
-        await updateExchangeRate();
-
-        // Actualizar balances de tokens
-        await updateTokenBalances();
+        // Actualizar reservas, tasas de intercambio y balances
+        await Promise.all([
+            updateReserves(),
+            updateExchangeRate(),
+            updateTokenBalances()
+        ])
 
         // Mostrar detalles de la transacción de retiro
         showLiquidityRemovalTransactionDetails(receipt, removeAmountA, removeAmountB);
@@ -823,8 +844,11 @@ async function removeLiquidity() {
 
     } catch (error) {
         // Manejar errores
-        removeTransactionToast();
         console.error("Error al retirar liquidez:", error);
+        removeTransactionToast();
+
+        // Mostrar toast de error
+        showTransactionToast("Error al retirar liquidez", 'error');
     }
 }
 
@@ -1162,6 +1186,54 @@ function mostrarMensajeErrorSwap(mensaje, inputId) {
         inputElement.removeEventListener('focus', clearErrorHandler);
     };
     inputElement.addEventListener('focus', clearErrorHandler);
+}
+
+
+// Función para mostrar mensajes de error en liquidez
+function mostrarMensajeErrorLiquidity(inputIds) {
+    inputIds.forEach(inputId => {
+        let mensaje = '';
+        
+        // Determinar mensaje específico según el input
+        switch(inputId) {
+            case 'amountA':
+                mensaje = "Por favor, ingresa una cantidad válida para el Token A";
+                break;
+            case 'amountB':
+                mensaje = "Por favor, ingresa una cantidad válida para el Token B";
+                break;
+            case 'removeAmountA':
+                mensaje = "Por favor, ingresa una cantidad válida para retirar Token A";
+                break;
+            case 'removeAmountB':
+                mensaje = "Por favor, ingresa una cantidad válida para retirar Token B";
+                break;
+        }
+
+        // Eliminar cualquier mensaje de error existente
+        const existingErrorElement = document.getElementById(`${inputId}Error`);
+        if (existingErrorElement) {
+            existingErrorElement.remove();
+        }
+
+        // Crear elemento de error
+        const errorElement = document.createElement('div');
+        errorElement.id = `${inputId}Error`;
+        errorElement.className = 'text-red-500 text-sm mt-2';
+        errorElement.textContent = mensaje;
+
+        // Encontrar el contenedor del input
+        const inputContainer = document.getElementById(inputId).parentNode;
+        inputContainer.appendChild(errorElement);
+
+        // Agregar evento para limpiar el mensaje cuando se haga foco en el input
+        const inputElement = document.getElementById(inputId);
+        const clearErrorHandler = () => {
+            errorElement.remove();
+            inputElement.removeEventListener('focus', clearErrorHandler);
+        };
+        inputElement.addEventListener('focus', clearErrorHandler);
+    });
 }
 
 
