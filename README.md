@@ -53,6 +53,11 @@ Simple DEX es una interfaz de usuario minimalista y eficiente para un protocolo 
    npm run dev
    ```
 
+4. **Generar documentación**
+   ```bash
+   npm run docs
+   ```
+
 ## 🌐 Configuración de Red
 
 ### Scroll Sepolia Testnet
@@ -60,6 +65,7 @@ Simple DEX es una interfaz de usuario minimalista y eficiente para un protocolo 
 - **Nombre de Red**: Scroll Sepolia
 - **Contrato DEX**: `0x252a63704FDeC39AeC9A8016416732136A3e6440`
 - **Explorer**: [Scroll Sepolia Explorer](https://sepolia.scrollscan.dev/)
+
 
 ## 🤝 Contribuir
 
@@ -77,6 +83,7 @@ Este proyecto está licenciado bajo los términos de la licencia ISC. Ver el arc
 
 ## 🔗 Enlaces Útiles
 
+- **Netlify**: [SimpleDEX](https://simple-dex-frontend.netlify.app/)
 - [Documentación de Scroll](https://docs.scroll.io/)
 - [Scroll Bridge](https://scroll.io/bridge)
 - [Scroll Discord](https://discord.gg/scroll)
