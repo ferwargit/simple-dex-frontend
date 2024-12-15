@@ -1245,6 +1245,11 @@ function showTransactionToast(message, type = 'info') {
     // Verificar si ya existe un toast
     let existingToast = document.getElementById('transactionToast');
 
+    // Limpiar cualquier temporizador existente
+    if (existingToast && existingToast.timeoutId) {
+        clearTimeout(existingToast.timeoutId);
+    }
+
     // Actualizar el mensaje y el tipo del toast existente
     if (existingToast) {
         // Clases base y de estilo según el tipo
@@ -1303,6 +1308,13 @@ function showTransactionToast(message, type = 'info') {
         document.body.appendChild(existingToast);
     }
 
+    // Establecer temporizador para eliminar toast de error
+    if (type === 'error') {
+        existingToast.timeoutId = setTimeout(() => {
+            removeTransactionToast();
+        }, 3500);
+    }
+
     return existingToast;
 }
 
@@ -1333,6 +1345,13 @@ function mostrarMensajeErrorSwap(mensaje, inputId) {
     // Encontrar el contenedor del input
     const inputContainer = document.getElementById(inputId).parentNode;
     inputContainer.appendChild(errorElement);
+
+    // Agregar eliminación automática después de 3 segundos
+    // setTimeout(() => {
+    //     if (errorElement && errorElement.parentNode) {
+    //         errorElement.remove();
+    //     }
+    // }, 3000);
 
     // Agregar evento para limpiar el mensaje cuando se haga foco en el input
     const inputElement = document.getElementById(inputId);
@@ -1380,6 +1399,13 @@ function mostrarMensajeErrorLiquidity(inputIds) {
         // Encontrar el contenedor del input
         const inputContainer = document.getElementById(inputId).parentNode;
         inputContainer.appendChild(errorElement);
+
+        // Agregar eliminación automática después de 3 segundos
+        // setTimeout(() => {
+        //     if (errorElement && errorElement.parentNode) {
+        //         errorElement.remove();
+        //     }
+        // }, 3000);
 
         // Agregar evento para limpiar el mensaje cuando se haga foco en el input
         const inputElement = document.getElementById(inputId);
