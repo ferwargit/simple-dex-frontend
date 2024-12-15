@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "live-server --port=8080 --host=127.0.0.1 src/"
+    "dev": "live-server --port=8080 --host=127.0.0.1 src/",
+    "docs": "jsdoc src/js/index.js -d docs",
+    "docs:watch": "jsdoc src/js/index.js -d docs --watch"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/ferwargit/simple-dex-frontend#readme",
   "devDependencies": {
+    "jsdoc": "^4.0.4",
     "live-server": "^1.2.1"
   }
 }
