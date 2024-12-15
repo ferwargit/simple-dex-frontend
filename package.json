@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ferwargit/simple-dex-frontend#readme",
   "devDependencies": {
+    "clean-jsdoc-theme": "^4.3.0",
     "jsdoc": "^4.0.4",
     "live-server": "^1.2.1"
   }
