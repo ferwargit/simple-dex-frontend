@@ -97,5 +97,5 @@ Si encuentras algún problema o tienes sugerencias, por favor:
 ---
 
 <p align="center">
-  Desarrollado con ❤️ por el equipo de Simple DEX
+  Desarrollado por Fernando Warno
 </p>
