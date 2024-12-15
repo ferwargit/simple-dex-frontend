@@ -561,11 +561,43 @@ async function swapTokenAforB() {
         // Convertir a unidades del contrato (asumiendo 18 decimales)
         const amountAInWei = ethers.parseUnits(amountAIn, 18);
 
+        // Obtener direcciones de tokens
+        const tokenAAddress = await simpleDexContract.tokenA();
+        const tokenBAddress = await simpleDexContract.tokenB();
+
+        // Crear contratos de tokens
+        const tokenAContract = new ethers.Contract(tokenAAddress, ERC20_ABI, signer);
+        const tokenBContract = new ethers.Contract(tokenBAddress, ERC20_ABI, signer);
+
+        // Verificar saldo de Token B
+        const balanceA = await tokenAContract.balanceOf(await signer.getAddress());
+
+        // Verificar si hay suficiente saldo
+        if (amountAInWei > balanceA) {
+            throw new Error("Saldo insuficiente de Token A");
+        }
+
+        // Aprobar tokens antes del intercambio
+        const approveTokenATx = await tokenAContract.approve(simpleDexContractAddress, amountAInWei);
+        await approveTokenATx.wait();
+
+        // Logging adicional para depuración
+        console.log("Parámetros de intercambio:", {
+            amountAIn,
+            amountAInWei: amountAInWei.toString(),
+            balanceA: balanceA.toString()
+        });
+
         // Llamar a la función de intercambio del contrato
         const tx = await simpleDexContract.swapAforB(amountAInWei);
 
         // Esperar confirmación de la transacción
         const receipt = await tx.wait();
+
+        // Validación adicional de la transacción
+        if (!receipt || !receipt.status) {
+            throw new Error("La transacción de intercambio no se completó correctamente");
+        }
 
         // Mostrar detalles de la transacción de intercambio
         showSwapAforBTransactionDetails(receipt, amountAIn);
@@ -587,6 +619,14 @@ async function swapTokenAforB() {
 
     } catch (error) {
         console.error("Error en el intercambio de Token A por Token B:", error);
+
+        // Mostrar detalles específicos del error
+        console.log("Error details:", {
+            message: error.message,
+            code: error.code,
+            reason: error.reason,
+            data: error.data
+        });
 
         // Eliminar toast de transacción
         removeTransactionToast();
